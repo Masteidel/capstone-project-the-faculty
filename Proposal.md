@@ -42,9 +42,8 @@ A student wants to sign up for classes for the following semester. The college u
 
 **Section**: Represents a more detailed specific offering of the course, including the location, the professor, and the maximum number of students
 - `section_id (pk)`
-- `name`
+- `abbreviation`
 - `student_cap`
-- `building`
 - `course_id (fk)`
 - `professor_id (fk)`
 
@@ -61,9 +60,12 @@ A student wants to sign up for classes for the following semester. The college u
 Briefly describe what each user role/authority can do. (These are user stories.)
 
 - Create a course (Professor)
+- Create a section for a course (Professor)
+- Create a lecture for a section (Professor)
 - Register for a course (Student, Professor)
 - Edit a future course (Student, Professor)
-- Cancel a course (Student, Professor)
+- Delete a section (Professor)
+- Un-enroll a student from an existing section (Student, Professor)
 - Browse Courses (Anyone)
 - Sign up for a course (Authenticated user)
 
@@ -73,25 +75,33 @@ Briefly describe what each user role/authority can do. (These are user stories.)
 Create a course that students can join.
 
 - Brief description of the course (e.g., Intro to Abstract Math)
-- Date and time (in the future)
-- Location (based on building numbers: Building A - Math, Building B - Science, Building C - History, Building D - English)
+- Days and time
 - Maximum students
-- Number of credits (1-4)
+- Number of credits (1–4)
 
 **Precondition**: User must be logged in as a Professor.  
 **Post-condition**: If the user is a Professor, they can create a course for everyone else to see.
 
-## Edit a Course
-Can only edit a course in the future.
+## Create a section
+Create a section for students to join
+- Choose a course to teach
+- Set the maximum number of students
 
-**Precondition**: User must be logged in as a Professor. The course must be in the future.  
-**Post-condition**: If the user is a Professor, they can edit a course from the future for everyone else to see.
+**Precondition**: The user must be logged as a Professor.
+**Post-condition**: If the user is a Professor they can create a section for a course for everyone to see.
 
-## Cancel a Course Enrollment
-Can only cancel a course in the future.
 
-**Precondition**: User must be logged in as a Student or Professor. The course date/time must be in the future.  
-**Post-condition**: The course is not deleted. The student is removed from enrollment in that course.
+## Edit a Section
+- Edit the student cap
+
+**Precondition**: User must be logged in as a Professor.
+**Post-condition**: If the user is a Professor, they can edit a course for everyone else to see.
+
+## Cancel a Section Enrollment
+- Remove a student from a section
+
+**Precondition**: User must be logged in as a Student or Professor. 
+**Post-condition**: The section is not deleted. The student is removed from enrollment in that course.
 
 ## Browse Courses
 Display available courses to anyone using the application.
