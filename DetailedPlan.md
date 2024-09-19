@@ -1,5 +1,98 @@
 # Detailed Plan
 
+## Class Diagram
+src
+├───main
+│   └───java
+│       └───learn
+│           └───register
+│               │   App.java
+│               │
+│               ├───controllers
+│               │       ErrorResponse.java
+│               │       GlobalExceptionHandler.java
+│               │       StudentController.java
+│               │       ProfessorController.java
+│               │       CourseController.java
+│               │       EnrollmentController.java
+│               │       SectionController.java
+│               │       LectureController.java
+│               │
+│               ├───domain
+│               │       Result.java
+│               │       ResultType.java
+│               │       Validations.java
+│               │       StudentService.java
+│               │       ProfessorService.java
+│               │       CourseService.java
+│               │       EnrollmentService.java
+│               │       SectionService.java
+│               │       LectureService.java
+│               │
+│               ├───models
+│               │       Student.java
+│               │       Professor.java
+│               │       Course.java
+│               │       Section.java
+│               │       Lecture.java
+│               │       Enrollment.java
+│               │       Status.java     -- Enrollment status enum
+│               │       Subject.java    -- Course subject enum
+│               │
+│               └───data
+│                   │   StudentRepository.java
+│                   │   StudentJdbcTemplateRepository.java
+│                   │   ProfessorRepository.java
+│                   │   ProfessorJdbcTemplateRepository.java
+│                   │   CourseRepository.java
+│                   │   CourseJdbcTemplateRepository.java
+│                   │   SectionRepository.java
+│                   │   SectionJdbcTemplateRepository.java
+│                   │   LectureRepository.java
+│                   │   LectureJdbcTemplateRepository.java
+│                   │   EnrollmentRepository.java
+│                   │   EnrollmentJdbcTemplateRepository.java
+│                   │
+│                   └───mappers
+│                           StudentMapper.java
+│                           ProfessorMapper.java
+│                           CourseMapper.java
+│                           SectionMapper.java
+│                           LectureMapper.java
+│                           EnrollmentMapper.java
+│
+│
+└───test
+└───java
+└───learn
+└───register
+├───data
+│       StudentJdbcTemplateRepositoryTest.java
+│       ProfessorJdbcTemplateRepositoryTest.java
+│       CourseJdbcTemplateRepositoryTest.java
+│       EnrollJdbcTemplateRepositoryTest.java
+│       SectionJdbcTemplateRepositoryTest.java
+│       LectureJdbcTemplateRepositoryTest.java
+│       KnownGoodState.java
+│
+├───domain
+│       ControllerServiceTest.java
+│       ProfessorServiceTest.java
+│       CourseServiceTest.java
+│       EnrollmentServiceTest.java
+│       SectionServiceTest.java
+│       LectureServiceTest.java
+│
+└───controllers
+GlobalExceptionHandlerTest.java
+StudentControllerTest.java
+ProfessorControllerTest.java
+CourseControllerTest.java
+SectionControllerTest.java
+LectureControllerTest.java
+EnrollmentControllerTest.java
+
+
 ## src/main/java/learn/register
 
 ### App.java
