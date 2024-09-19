@@ -18,6 +18,7 @@
 - **Methods**:
     - **Constructor**: Initializes error details.
     - **Getters/Setters**: For accessing and modifying error properties.
+    - **Build Method**: Creates an instance of ErrorResponse using a builder pattern.
 
 ## GlobalExceptionHandler.java
 - **Purpose**: Centralized exception handling for all controllers.
@@ -328,6 +329,120 @@
     - `COMPUTER_SCIENCE`
     - `ENGLISH`
 
+# Data Structure and Overview
+
+## StudentRepository.java
+- **Purpose**: Interface for managing student data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all students.
+  - `findById(int id)`: Finds a student by their ID.
+  - `add(Student student)`: Adds a new student.
+  - `update(Student student)`: Updates an existing student.
+  - `deleteById(int id)`: Deletes a student by their ID.
+
+---
+
+## StudentJdbcTemplateRepository.java
+- **Purpose**: Implementation of `StudentRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `StudentRepository`.
+  - Uses SQL queries for data access and manipulation.
+
+---
+
+## ProfessorRepository.java
+- **Purpose**: Interface for managing professor data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all professors.
+  - `findById(int id)`: Finds a professor by their ID.
+  - `add(Professor professor)`: Adds a new professor.
+  - `update(Professor professor)`: Updates an existing professor.
+  - `deleteById(int id)`: Deletes a professor by their ID.
+
+---
+
+## ProfessorJdbcTemplateRepository.java
+- **Purpose**: Implementation of `ProfessorRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `ProfessorRepository`.
+  - Uses SQL queries for data access and manipulation.
+
+---
+
+## CourseRepository.java
+- **Purpose**: Interface for managing course data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all courses.
+  - `findById(int id)`: Finds a course by its ID.
+  - `add(Course course)`: Adds a new course.
+  - `update(Course course)`: Updates an existing course.
+  - `deleteById(int id)`: Deletes a course by its ID.
+
+---
+
+## CourseJdbcTemplateRepository.java
+- **Purpose**: Implementation of `CourseRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `CourseRepository`.
+  - Uses SQL queries for data access and manipulation.
+
+---
+
+## SectionRepository.java
+- **Purpose**: Interface for managing section data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all sections.
+  - `findById(int id)`: Finds a section by its ID.
+  - `add(Section section)`: Adds a new section.
+  - `update(Section section)`: Updates an existing section.
+  - `deleteById(int id)`: Deletes a section by its ID.
+
+---
+
+## SectionJdbcTemplateRepository.java
+- **Purpose**: Implementation of `SectionRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `SectionRepository`.
+  - Uses SQL queries for data access and manipulation.
+
+---
+
+## LectureRepository.java
+- **Purpose**: Interface for managing lecture data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all lectures.
+  - `findById(int id)`: Finds a lecture by its ID.
+  - `add(Lecture lecture)`: Adds a new lecture.
+  - `update(Lecture lecture)`: Updates an existing lecture.
+  - `deleteById(int id)`: Deletes a lecture by its ID.
+
+---
+
+## LectureJdbcTemplateRepository.java
+- **Purpose**: Implementation of `LectureRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `LectureRepository`.
+  - Uses SQL queries for data access and manipulation.
+
+---
+
+## EnrollmentRepository.java
+- **Purpose**: Interface for managing enrollment data operations.
+- **Methods**:
+  - `findAll()`: Retrieves all enrollments.
+  - `findById(int id)`: Finds an enrollment by its ID.
+  - `add(Enrollment enrollment)`: Adds a new enrollment.
+  - `update(Enrollment enrollment)`: Updates an existing enrollment.
+  - `deleteById(int id)`: Deletes an enrollment by its ID.
+
+---
+
+## EnrollmentJdbcTemplateRepository.java
+- **Purpose**: Implementation of `EnrollmentRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+  - Implements all methods from `EnrollmentRepository`.
+  - Uses SQL queries for data access and manipulation.
+
 # Mappers Structure and Overview
 
 ## StudentMapper.java
@@ -377,118 +492,6 @@
     - **Returns**: An `Enrollment` object populated with data from the database.
 
 
-# Data Structure and Overview
 
-## StudentRepository.java
-- **Purpose**: Interface for managing student data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all students.
-    - `findById(int id)`: Finds a student by their ID.
-    - `add(Student student)`: Adds a new student.
-    - `update(Student student)`: Updates an existing student.
-    - `deleteById(int id)`: Deletes a student by their ID.
-
----
-
-## StudentJdbcTemplateRepository.java
-- **Purpose**: Implementation of `StudentRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `StudentRepository`.
-    - Uses SQL queries for data access and manipulation.
-
----
-
-## ProfessorRepository.java
-- **Purpose**: Interface for managing professor data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all professors.
-    - `findById(int id)`: Finds a professor by their ID.
-    - `add(Professor professor)`: Adds a new professor.
-    - `update(Professor professor)`: Updates an existing professor.
-    - `deleteById(int id)`: Deletes a professor by their ID.
-
----
-
-## ProfessorJdbcTemplateRepository.java
-- **Purpose**: Implementation of `ProfessorRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `ProfessorRepository`.
-    - Uses SQL queries for data access and manipulation.
-
----
-
-## CourseRepository.java
-- **Purpose**: Interface for managing course data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all courses.
-    - `findById(int id)`: Finds a course by its ID.
-    - `add(Course course)`: Adds a new course.
-    - `update(Course course)`: Updates an existing course.
-    - `deleteById(int id)`: Deletes a course by its ID.
-
----
-
-## CourseJdbcTemplateRepository.java
-- **Purpose**: Implementation of `CourseRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `CourseRepository`.
-    - Uses SQL queries for data access and manipulation.
-
----
-
-## SectionRepository.java
-- **Purpose**: Interface for managing section data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all sections.
-    - `findById(int id)`: Finds a section by its ID.
-    - `add(Section section)`: Adds a new section.
-    - `update(Section section)`: Updates an existing section.
-    - `deleteById(int id)`: Deletes a section by its ID.
-
----
-
-## SectionJdbcTemplateRepository.java
-- **Purpose**: Implementation of `SectionRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `SectionRepository`.
-    - Uses SQL queries for data access and manipulation.
-
----
-
-## LectureRepository.java
-- **Purpose**: Interface for managing lecture data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all lectures.
-    - `findById(int id)`: Finds a lecture by its ID.
-    - `add(Lecture lecture)`: Adds a new lecture.
-    - `update(Lecture lecture)`: Updates an existing lecture.
-    - `deleteById(int id)`: Deletes a lecture by its ID.
-
----
-
-## LectureJdbcTemplateRepository.java
-- **Purpose**: Implementation of `LectureRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `LectureRepository`.
-    - Uses SQL queries for data access and manipulation.
-
----
-
-## EnrollmentRepository.java
-- **Purpose**: Interface for managing enrollment data operations.
-- **Methods**:
-    - `findAll()`: Retrieves all enrollments.
-    - `findById(int id)`: Finds an enrollment by its ID.
-    - `add(Enrollment enrollment)`: Adds a new enrollment.
-    - `update(Enrollment enrollment)`: Updates an existing enrollment.
-    - `deleteById(int id)`: Deletes an enrollment by its ID.
-
----
-
-## EnrollmentJdbcTemplateRepository.java
-- **Purpose**: Implementation of `EnrollmentRepository` using `JdbcTemplate` for database interaction.
-- **Methods**:
-    - Implements all methods from `EnrollmentRepository`.
-    - Uses SQL queries for data access and manipulation.
 
 
