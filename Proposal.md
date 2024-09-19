@@ -4,7 +4,7 @@
 Being able to enroll in courses provided by professors.
 
 # 2. Technical Solution
-Using MySQL as a database, Java for the backend, and React for the frontend, while saving data to AWS. Additionally, we will be using the SendGrid API to send registration confirmation emails to students for the upcoming semester.
+Use a database to keep track of what professors are teaching what courses and at what times. A professor can teach a course by creating a section of that course with a given maximum number of students and assigning lectures that take place on given days of the week at given times. Using Java for validation, the application will prevent the same professor from teaching multiple lectures at the same time. Multiple professors can teach the same course at the same times. Likewise students cannot enroll in a section of a course that has lectures at the same time as another section that they are enrolled in. Students cannot enroll in a section that has the maximum number of students. Students can be removed from a section by themselves or by the professor of that section.
 
 ## Scenario 1
 A student wants to sign up for classes for the following semester. The college uses our registration website in order to sign up for classes. They can view the professor teaching the class, the time the class starts and ends, how many credits the class is worth, and the number of students enrolled.
