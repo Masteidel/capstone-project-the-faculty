@@ -59,15 +59,14 @@ A student wants to sign up for classes for the following semester. The college u
 
 Briefly describe what each user role/authority can do. (These are user stories.)
 
-- Create a course (Professor)
-- Create a section for a course (Professor)
-- Create a lecture for a section (Professor)
-- Register for a course (Student, Professor)
-- Edit a future course (Student, Professor)
-- Delete a section (Professor)
-- Un-enroll a student from an existing section (Student, Professor)
+- Create a course (Professor) - The Professor can create a brand new course 
+- Create a section for a course (Professor) - The Professor can create a brand new section for a specific course
+- Create a lecture for a section (Professor) - The Professor can create a brand new lecture for a specific section 
+- Edit a future section (Student, Professor) - Professor can edit a section by changing student limit and lecture time and day
+- Delete a section (Professor) - The Professor can delete his involvement in a section meaning he won't be teaching it anymore
+- Un-enroll a student from an existing section (Student, Professor) - The Student and Professor can both un-enroll that student from a section
 - Browse Courses (Anyone)
-- Sign up for a course (Authenticated user)
+- Sign up for a course (Authenticated user) - In order to sign up for a section student must be logged in
 
 # 5. User Stories/Scenarios
 
