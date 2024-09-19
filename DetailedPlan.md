@@ -1,5 +1,92 @@
 # Detailed Plan
 
+# High-level Requirements
+
+The system is designed for two main users: Professors and Students, with the following capabilities:
+
+## For Professors:
+- **Create a Course**: Professors can create a new course by specifying the course name, subject, credits, and other relevant details.
+- **Create a Section**: Professors can create sections for the courses they are teaching, setting the maximum number of students for each section.
+- **Create a Lecture**: Professors can create lectures for the sections of the courses they are teaching, specifying the day, time, and duration of the lecture.
+- **Edit a Section**: Professors can modify the student limit or lecture details for any future section.
+- **Delete a Section**: Professors can remove their involvement in a course by deleting the section they are assigned to.
+- **Un-enroll Students**: Professors can remove students from their sections, effectively un-enrolling them from that specific course.
+
+## For Students:
+- **Browse Courses**: Students can browse through available courses, with filters for course type, time, and professor.
+- **Sign Up for a Course**: Students can enroll in sections, provided that there is space, the time does not conflict with another course they are enrolled in, and they have not exceeded their credit limit.
+- **Cancel Enrollment**: Students can un-enroll themselves from a section if they no longer wish to be part of the course.
+
+---
+
+## Data Fields
+
+- **Student**:
+  - `student_id`: A unique identifier for the student (primary key).
+  - `first_name`: The student's first name.
+  - `last_name`: The student's last name.
+  - `email`: The student's email address.
+  - `phone`: The student's phone number.
+  - `major`: The student's declared major.
+  - `year`: The student's current year in school.
+  - `credits`: The number of credits the student is currently enrolled in.
+
+- **Professor**:
+  - `professor_id`: A unique identifier for the professor (primary key).
+  - `first_name`: The professor's first name.
+  - `last_name`: The professor's last name.
+  - `email`: The professor's email address.
+  - `phone`: The professor's phone number.
+
+- **Course**:
+  - `course_id`: A unique identifier for the course (primary key).
+  - `name`: The name of the course.
+  - `subject`: The subject of the course (e.g., Math, Science, History).
+  - `credits`: The number of credits the course is worth.
+
+- **Section**:
+  - `section_id`: A unique identifier for the section (primary key).
+  - `abbreviation`: A shortened identifier for the section.
+  - `student_cap`: The maximum number of students allowed in the section.
+  - `course_id`: Foreign key linking to the course.
+  - `professor_id`: Foreign key linking to the professor.
+
+- **Enrollment**:
+  - `enrollment_id`: A unique identifier for the enrollment (primary key).
+  - `status`: Tracks the student's enrollment status (e.g., Enrolled, Waitlisted).
+  - `student_id`: Foreign key linking to the student.
+  - `section_id`: Foreign key linking to the section.
+
+- **Lecture**:
+  - `lecture_id`: A unique identifier for the lecture (primary key).
+  - `day`: The day of the week the lecture takes place.
+  - `start_time`: The time the lecture begins.
+  - `end_time`: The time the lecture ends.
+  - `duration`: The length of the lecture.
+  - `section_id`: Foreign key linking to the section.
+
+---
+
+## Validation Rules
+
+- **Student Enrollment**:
+  - A student cannot be enrolled in multiple lectures that take place at the same time.
+  - A student cannot enroll in a section that is at full capacity.
+  - The student's total credits cannot exceed the allowed limit.
+
+- **Professor Lectures**:
+  - A professor cannot be assigned to teach multiple lectures at the same time.
+
+---
+
+## Technical Requirements
+
+- **Database Usage**: The system will use a relational database to store information about students, professors, courses, sections, enrollments, and lectures.
+- **Validation**: Java will be used to enforce validation rules, ensuring that professors and students cannot have overlapping schedules or exceed enrollment limits.
+- **Three-Layer Architecture**: The system will be designed with a clear separation between the presentation layer, business logic, and data access.
+- **Testing**: The repository and service layers will be fully tested to cover both positive and negative scenarios, ensuring the system functions correctly under different conditions.
+
+
 ## Class Diagram
 src
 ├───main
