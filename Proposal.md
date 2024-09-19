@@ -1,3 +1,5 @@
+## Capstone Proposal
+
 # 1. Problem Statement
 Being able to enroll in courses provided by professors.
 
