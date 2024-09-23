@@ -3,8 +3,10 @@ package learn.register.data;
 import learn.register.data.mappers.AppUserMapper;
 import learn.register.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 public class AppUserJdbcTemplateRepository implements AppUserRepository {
@@ -37,6 +39,23 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     @Override
     public void update(AppUser appUser) {
+    }
+
+    private void updateRoles(AppUser user) {
+        // delete all roles, then re-add
+        jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", user.getAppUserId());
+
+        Collection<GrantedAuthority> authorities = user.getAuthorities();
+
+        if (authorities == null) {
+            return;
+        }
+
+        for (String role : AppUser.convertAuthoritiesToRoles(authorities)) {
+            String sql = "insert into app_user_role (app_user_id, app_role_id) "
+                    + "select ?, app_role_id from app_role where `name` = ?;";
+            jdbcTemplate.update(sql, user.getAppUserId(), role);
+        }
     }
 
     private List<String> getRolesByUsername(String username) {

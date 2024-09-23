@@ -48,7 +48,7 @@ public class AppUser extends User {
         return authorities;
     }
 
-    public List<String> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
+    public static List<String> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
         return authorities.stream()
                 .map(a -> a.getAuthority().substring(AUTHORITY_PREFIX.length()))
                 .collect(Collectors.toList());
