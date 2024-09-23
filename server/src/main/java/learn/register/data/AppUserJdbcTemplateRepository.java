@@ -63,7 +63,6 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
     }
 
     @Override
-    public void update(AppUser appUser) {
     @Transactional
     public void update(AppUser user) {
 
