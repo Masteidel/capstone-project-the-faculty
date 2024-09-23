@@ -65,6 +65,16 @@ The system is designed for two main users: Professors and Students, with the fol
   - `duration`: The length of the lecture.
   - `section_id`: Foreign key linking to the section.
 
+- **AppUser**:
+  - `app_user_id`: A unique identifier for the app user (primary key).
+  - `username`: The app user's username.
+  - `password_hash`: The hash of the app user's password.
+  - `disabled`: Boolean value indicating whether or not the app user's account is enabled.
+
+  - **AppUser**:
+  - `app_role_id`: A unique identifier for the app role (primary key).
+  - `name`: The name of the app role.
+
 ---
 
 ## Validation Rules
@@ -104,6 +114,7 @@ src
 │               │       EnrollmentController.java
 │               │       SectionController.java
 │               │       LectureController.java
+│               │       AuthController.java
 │               │
 │               ├───domain
 │               │       Result.java
@@ -125,6 +136,12 @@ src
 │               │       Enrollment.java
 │               │       Status.java     -- Enrollment status enum
 │               │       Subject.java    -- Course subject enum
+│               │       AppUser.java
+│               │       AppRole.java
+│               │
+│               ├───security
+│               │       AppUserService.java
+│               │       SecurityConfig.java
 │               │
 │               └───data
 │                   │   StudentRepository.java
@@ -139,6 +156,10 @@ src
 │                   │   LectureJdbcTemplateRepository.java
 │                   │   EnrollmentRepository.java
 │                   │   EnrollmentJdbcTemplateRepository.java
+│                   │   AppUserRepository.java
+│                   │   AppUserJdbcTemplateRepository.java
+│                   │   AppRoleRepository.java
+│                   │   AppRoleJdbcTemplateRepository.java
 │                   │
 │                   └───mappers
 │                           StudentMapper.java
@@ -150,34 +171,37 @@ src
 │
 │
 └───test
-└───java
-└───learn
-└───register
-├───data
-│       StudentJdbcTemplateRepositoryTest.java
-│       ProfessorJdbcTemplateRepositoryTest.java
-│       CourseJdbcTemplateRepositoryTest.java
-│       EnrollJdbcTemplateRepositoryTest.java
-│       SectionJdbcTemplateRepositoryTest.java
-│       LectureJdbcTemplateRepositoryTest.java
-│       KnownGoodState.java
-│
-├───domain
-│       ControllerServiceTest.java
-│       ProfessorServiceTest.java
-│       CourseServiceTest.java
-│       EnrollmentServiceTest.java
-│       SectionServiceTest.java
-│       LectureServiceTest.java
-│
-└───controllers
-GlobalExceptionHandlerTest.java
-StudentControllerTest.java
-ProfessorControllerTest.java
-CourseControllerTest.java
-SectionControllerTest.java
-LectureControllerTest.java
-EnrollmentControllerTest.java
+    └───java
+        └───learn
+            └───register
+                ├───data
+                │       StudentJdbcTemplateRepositoryTest.java
+                │       ProfessorJdbcTemplateRepositoryTest.java
+                │       CourseJdbcTemplateRepositoryTest.java
+                │       EnrollJdbcTemplateRepositoryTest.java
+                │       SectionJdbcTemplateRepositoryTest.java
+                │       LectureJdbcTemplateRepositoryTest.java
+                │       AppUserJdbcTemplateRepositoryTest.java
+                │       AppRoleJdbcTemplateRepositoryTest.java
+                │       KnownGoodState.java
+                │
+                ├───domain
+                │       ControllerServiceTest.java
+                │       ProfessorServiceTest.java
+                │       CourseServiceTest.java
+                │       EnrollmentServiceTest.java
+                │       SectionServiceTest.java
+                │       LectureServiceTest.java
+                │
+                └───controllers
+                        GlobalExceptionHandlerTest.java
+                        StudentControllerTest.java
+                        ProfessorControllerTest.java
+                        CourseControllerTest.java
+                        SectionControllerTest.java
+                        LectureControllerTest.java
+                        EnrollmentControllerTest.java
+                        AuthControllerTest.java
 
 
 ## src/main/java/learn/register
@@ -287,6 +311,16 @@ EnrollmentControllerTest.java
     - `addLecture(Lecture lecture)`: **POST** - Adds a new lecture.
     - `updateLecture(int id, Lecture lecture)`: **PUT** - Updates lecture details.
     - `deleteLecture(int id)`: **DELETE** - Removes a lecture by its ID.
+
+---
+
+## AuthController.java
+- **Variables**:
+    - `AuthenticationManager authenticationManager`
+    - `JwtConverter converter`
+
+  - **Methods**:
+    - `authenticate(Map<String, String> credentials)`: Attempts to authenticate the user and returns a ResponseEntity based on whether or not the attempt was successful.
 
 
 # Domain Structure and Method Breakdown
@@ -509,6 +543,34 @@ EnrollmentControllerTest.java
     - `COMPUTER_SCIENCE`
     - `ENGLISH`
 
+---
+
+## AppUser.java
+- **Purpose**: Represents an app user
+- **Variables**:
+  - `int app_user_id`: Unique identifier for the app user.
+  - `String username`: The app user's username.
+  - `String password_hash`: The hash of the app user's password.
+  - `boolean disabled`: Boolean value indicating whether or not the app user's account is enabled.
+- **Methods**:
+  - **Getters/Setters**
+
+---
+
+## AppRole.java
+- **Purpose**: Represents an app role for security
+- **Variables**:
+  - `int app_role_id`: Unique identifier for the app role.
+  - `String name`: The app role's name.
+- **Methods**:
+  - **Getters/Setters**
+
+---
+
+- **AppUser**:
+  - `int app_role_id`: Unique identifier for the app role.
+  - `String name`: The name of the app role.
+
 # Data Structure and Overview
 
 ## StudentRepository.java
@@ -623,6 +685,44 @@ EnrollmentControllerTest.java
   - Implements all methods from `EnrollmentRepository`.
   - Uses SQL queries for data access and manipulation.
 
+---
+
+## AppUserRepository.java
+- **Purpose**: Interface for managing appUser data operations.
+- **Methods**:
+  - `findByUsername(String username)`: Finds a user by username.
+  - `add(AppUser user)`: Adds a user.
+  - `update(AppUser user)`: Updates a user.
+  - `updateRoles(AppUser user)`: Updates a user's roles.
+  - `AppUser map(ResultSet rs, int rowId)`: Maps a SQL row to an AppUser object.
+  - `getRolesByUserId(int appUserId)`: Finds the roles of user given their id.
+
+---
+
+## AppUserJdbcTemplateRepository.java
+- **Purpose**: Implementation of `AppUserRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+- Implements all methods from `AppUserRepository`.
+- Uses SQL queries for data access and manipulation.
+
+---
+
+## AppRoleRepository.java
+- **Purpose**: Interface for managing appUser data operations.
+- **Methods**:
+  - `findById(int id)`: Finds a role by id.
+  - `add(AppRole role)`: Adds a role.
+  - `update(AppRole role)`: Updates a role.
+  - `AppRole map(ResultSet rs, int rowId)`: Maps a SQL row to an AppRole object.
+
+---
+
+## AppRoleJdbcTemplateRepository.java
+- **Purpose**: Implementation of `AppRoleRepository` using `JdbcTemplate` for database interaction.
+- **Methods**:
+- Implements all methods from `AppRoleRepository`.
+- Uses SQL queries for data access and manipulation.
+
 # Mappers Structure and Overview
 
 ## StudentMapper.java
@@ -671,7 +771,21 @@ EnrollmentControllerTest.java
     - `mapRow(ResultSet rs, int rowNum)`: Maps the result set from the database to an `Enrollment` object.
     - **Returns**: An `Enrollment` object populated with data from the database.
 
+# Security Structure and Overview
 
+## AppUserService.java
+- **Purpose**: Provides user management and authentication services.
+- **Methods**:
+  - **Constructor**
+  - `loadUserByUsername(String username)`: Loads user details based on the given username.
+  - `add(AppUser user)`: Adds a new user after validating and encoding their password.
+  - `validate(AppUser user)`: Validates a user.
+  - `ensureAdmin()`: Ensures that an admin user exists in the system. If not, creates one with a random password.
 
+---
 
-
+## SecurityConfig.java
+- **Purpose**: Configures Spring Security for the application.
+- **Methods**:
+  - `configure(HttpSecurity http)`: Configures HTTP security for the application.
+  - `PasswordEncoder getEncoder()`: Returns a `BCryptPasswordEncoder` instance for secure password hashing. 
