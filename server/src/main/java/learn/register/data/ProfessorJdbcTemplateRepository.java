@@ -1,6 +1,8 @@
 package learn.register.data;
 
 import learn.register.data.mappers.ProfessorMapper;
+import learn.register.models.Professor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -29,8 +31,7 @@ public class ProfessorJdbcTemplateRepository implements ProfessorRepository {
     @Override
     @Transactional
     public Professor findById(int professorId) {
-        final String sql = "SELECT professor_id, first_name, last_name, email, phone "
-                + "FROM professor WHERE professor_id = ?";
+        final String sql = "SELECT professor_id, first_name, last_name, email, phone FROM professor WHERE professor_id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new ProfessorMapper(), professorId);
         } catch (DataAccessException ex) {
@@ -40,16 +41,15 @@ public class ProfessorJdbcTemplateRepository implements ProfessorRepository {
 
     @Override
     public Professor add(Professor professor) {
-        final String sql = "INSERT INTO professor (first_name, last_name, email, phone) "
-                + "VALUES (?, ?, ?, ?)";
+        final String sql = "INSERT INTO professor (first_name, last_name, email, phone) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, professor.getFirstName());
             ps.setString(2, professor.getLastName());
-            ps.setString(3, professor.email());
-            ps.setString(4, professor.phone());
+            ps.setString(3, professor.getEmail());
+            ps.setString(4, professor.getPhone());
             return ps;
         }, keyHolder);
 
@@ -63,12 +63,7 @@ public class ProfessorJdbcTemplateRepository implements ProfessorRepository {
 
     @Override
     public boolean update(Professor professor) {
-        final String sql = "UPDATE professor SET "
-                + "first_name = ?, "
-                + "last_name = ?, "
-                + "email = ?, "
-                + "phone = ? "
-                + "WHERE professor_id = ?";
+        final String sql = "UPDATE professor SET first_name = ?, last_name = ?, email = ?, phone = ? WHERE professor_id = ?";
         return jdbcTemplate.update(sql,
                 professor.getFirstName(),
                 professor.getLastName(),
@@ -82,19 +77,5 @@ public class ProfessorJdbcTemplateRepository implements ProfessorRepository {
     public boolean deleteById(int professorId) {
         final String sql = "DELETE FROM professor WHERE professor_id = ?";
         return jdbcTemplate.update(sql, professorId) > 0;
-    }
-
-    private static final class ProfessorMapper implements RowMapper<Professor> {
-
-        @Override
-        public Professor mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Professor professor = new Professor();
-            professor.setProfessorId(rs.getInt("professor_id"));
-            professor.setFirstName(rs.getString("first_name"));
-            professor.setLastName(rs.getString("last_name"));
-            professor.setEmail(rs.getString("email"));
-            professor.setPhone(rs.getString("phone"));
-            return professor;
-        }
     }
 }
