@@ -5,7 +5,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 public class JwtRequestFilter extends BasicAuthenticationFilter {
 
-    public JwtRequestFilter(AuthenticationManager authenticationManager) {
+    private final JwtConverter converter;
+
+    public JwtRequestFilter(AuthenticationManager authenticationManager, JwtConverter converter) {
         super(authenticationManager);
+        this.converter = converter;
     }
 }
