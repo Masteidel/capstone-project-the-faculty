@@ -12,6 +12,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
     }
 
     @Override
+
     public AppUser findByUsername(String username) {
         return null;
     }
@@ -23,6 +24,5 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     @Override
     public void update(AppUser appUser) {
-
     }
 }

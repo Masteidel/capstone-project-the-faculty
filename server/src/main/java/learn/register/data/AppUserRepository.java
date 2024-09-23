@@ -1,6 +1,7 @@
 package learn.register.data;
 
 import learn.register.models.AppUser;
+
 import org.springframework.transaction.annotation.Transactional;
 
 public interface AppUserRepository {
