@@ -1,9 +1,6 @@
 package learn.register.data;
 
-import learn.register.data.mappers.AgencyAgentMapper;
-import learn.register.data.mappers.AgencyMapper;
-import learn.register.data.mappers.LocationMapper;
-import learn.register.models.Agency;
+import learn.register.data.mappers.ProfessorMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -15,50 +12,44 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class AgencyJdbcTemplateRepository implements AgencyRepository {
+public class ProfessorJdbcTemplateRepository implements ProfessorRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public AgencyJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
+    public ProfessorJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public List<Agency> findAll() {
-        // limit until we develop a paging solution
-        final String sql = "select agency_id, short_name, long_name from agency limit 1000;";
-        return jdbcTemplate.query(sql, new AgencyMapper());
+    public List<Professor> findAll() {
+        final String sql = "SELECT professor_id, first_name, last_name, email, phone FROM professor";
+        return jdbcTemplate.query(sql, new ProfessorMapper());
     }
 
     @Override
     @Transactional
-    public Agency findById(int agencyId) {
-
-        final String sql = "select agency_id, short_name, long_name "
-                + "from agency "
-                + "where agency_id = ?;";
-
-        Agency result = jdbcTemplate.query(sql, new AgencyMapper(), agencyId).stream()
-                .findAny().orElse(null);
-
-        if (result != null) {
-            addLocations(result);
-            addAgents(result);
+    public Professor findById(int professorId) {
+        final String sql = "SELECT professor_id, first_name, last_name, email, phone "
+                + "FROM professor WHERE professor_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new ProfessorMapper(), professorId);
+        } catch (DataAccessException ex) {
+            return null;
         }
-
-        return result;
     }
 
     @Override
-    public Agency add(Agency agency) {
-
-        final String sql = "insert into agency (short_name, long_name) values (?,?);";
+    public Professor add(Professor professor) {
+        final String sql = "INSERT INTO professor (first_name, last_name, email, phone) "
+                + "VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, agency.getShortName());
-            ps.setString(2, agency.getLongName());
+            ps.setString(1, professor.getFirstName());
+            ps.setString(2, professor.getLastName());
+            ps.setString(3, professor.email());
+            ps.setString(4, professor.phone());
             return ps;
         }, keyHolder);
 
@@ -66,52 +57,44 @@ public class AgencyJdbcTemplateRepository implements AgencyRepository {
             return null;
         }
 
-        agency.setAgencyId(keyHolder.getKey().intValue());
-        return agency;
+        professor.setProfessorId(keyHolder.getKey().intValue());
+        return professor;
     }
 
     @Override
-    public boolean update(Agency agency) {
-
-        final String sql = "update agency set "
-                + "short_name = ?, "
-                + "long_name = ? "
-                + "where agency_id = ?";
-
-        return jdbcTemplate.update(sql, agency.getShortName(), agency.getLongName(), agency.getAgencyId()) > 0;
+    public boolean update(Professor professor) {
+        final String sql = "UPDATE professor SET "
+                + "first_name = ?, "
+                + "last_name = ?, "
+                + "email = ?, "
+                + "phone = ? "
+                + "WHERE professor_id = ?";
+        return jdbcTemplate.update(sql,
+                professor.getFirstName(),
+                professor.getLastName(),
+                professor.getEmail(),
+                professor.getPhone(),
+                professor.getProfessorId()) > 0;
     }
 
     @Override
     @Transactional
-    public boolean deleteById(int agencyId) {
-        jdbcTemplate.update("delete from location where agency_id = ?", agencyId);
-        jdbcTemplate.update("delete from agency_agent where agency_id = ?", agencyId);
-        return jdbcTemplate.update("delete from agency where agency_id = ?", agencyId) > 0;
+    public boolean deleteById(int professorId) {
+        final String sql = "DELETE FROM professor WHERE professor_id = ?";
+        return jdbcTemplate.update(sql, professorId) > 0;
     }
 
-    private void addLocations(Agency agency) {
+    private static final class ProfessorMapper implements RowMapper<Professor> {
 
-        final String sql = "select location_id, name, address, city, region, "
-                + "country_code, postal_code, agency_id "
-                + "from location "
-                + "where agency_id = ?";
-
-        var locations = jdbcTemplate.query(sql, new LocationMapper(), agency.getAgencyId());
-        agency.setLocations(locations);
+        @Override
+        public Professor mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Professor professor = new Professor();
+            professor.setProfessorId(rs.getInt("professor_id"));
+            professor.setFirstName(rs.getString("first_name"));
+            professor.setLastName(rs.getString("last_name"));
+            professor.setEmail(rs.getString("email"));
+            professor.setPhone(rs.getString("phone"));
+            return professor;
+        }
     }
-
-    private void addAgents(Agency agency) {
-
-        final String sql = "select aa.agency_id, aa.agent_id, aa.identifier, aa.activation_date, aa.is_active, "
-                + "sc.security_clearance_id, sc.name security_clearance_name, "
-                + "a.first_name, a.middle_name, a.last_name, a.dob, a.height_in_inches "
-                + "from agency_agent aa "
-                + "inner join agent a on aa.agent_id = a.agent_id "
-                + "inner join security_clearance sc on aa.security_clearance_id = sc.security_clearance_id "
-                + "where aa.agency_id = ?";
-
-        var agencyAgents = jdbcTemplate.query(sql, new AgencyAgentMapper(), agency.getAgencyId());
-        agency.setAgents(agencyAgents);
-    }
-
 }
