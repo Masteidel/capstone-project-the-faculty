@@ -1,6 +1,7 @@
 package learn.register.security;
 
 import learn.register.data.AppUserRepository;
+import learn.register.models.AppUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,13 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser appUser = repository.findByUsername(username);
+
+        if (appUser == null || !appUser.isEnabled()) {
+            throw new UsernameNotFoundException(username + " not found");
+        }
+
+        return appUser;
     }
 }
