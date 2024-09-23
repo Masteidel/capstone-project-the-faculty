@@ -5,16 +5,24 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
 
 public class AppUserMapper implements RowMapper<AppUser> {
 
+    private final List<String> roles;
+
+    public AppUserMapper(List<String> roles) {
+        this.roles = roles;
+    }
+
     @Override
-    public AppUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-        AppUser appUser = new AppUser();
-        appUser.setAppUserId(rs.getInt("app_user_id"));
-        appUser.setUsername(rs.getString("username"));
-        appUser.setPasswordHash(rs.getString("password_hash"));
-        appUser.setDisabled(rs.getBoolean("disabled"));
-        return appUser;
+    public AppUser mapRow(ResultSet rs, int i) throws SQLException {
+        return new AppUser(
+                UUID.fromString(rs.getString("app_user_id")),
+                rs.getString("username"),
+                rs.getString("password_hash"),
+                rs.getBoolean("disabled"),
+                roles);
     }
 }
