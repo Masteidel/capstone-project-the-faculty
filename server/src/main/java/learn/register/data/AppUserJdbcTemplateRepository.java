@@ -1,7 +1,11 @@
 package learn.register.data;
 
+import learn.register.data.mappers.AppUserMapper;
 import learn.register.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
@@ -12,9 +16,18 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
     }
 
     @Override
-
+    @Transactional
     public AppUser findByUsername(String username) {
-        return null;
+        List<String> roles = getRolesByUsername(username);
+
+        final String sql = "select app_user_id, username, password_hash, disabled "
+                + "from app_user "
+                + "where username = ?;";
+
+        return jdbcTemplate.query(sql, new AppUserMapper(roles), username)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
