@@ -38,8 +38,8 @@ public class LectureJdbcTemplateRepository implements LectureRepository {
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, lecture.getDay());
-            ps.setTime(2, lecture.getStartTime());
-            ps.setTime(3, lecture.getEndTime());
+            ps.setTime(2, java.sql.Time.valueOf(lecture.getStartTime())); // Convert LocalTime to java.sql.Time
+            ps.setTime(3, java.sql.Time.valueOf(lecture.getEndTime()));
             ps.setInt(4, lecture.getDuration());
             ps.setInt(5, lecture.getSectionId());
             return ps;
