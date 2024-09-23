@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 public class AppUserService implements UserDetailsService {
 
@@ -29,6 +30,17 @@ public class AppUserService implements UserDetailsService {
         }
 
         return appUser;
+    }
+
+    public AppUser create(String username, String password) {
+        validate(username);
+        validatePassword(password);
+
+        password = encoder.encode(password);
+
+        AppUser appUser = new AppUser(null, username, password, false, List.of("User"));
+
+        return repository.create(appUser);
     }
 
     private void validate(String username) {
