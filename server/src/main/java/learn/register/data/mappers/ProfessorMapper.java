@@ -1,2 +1,4 @@
-package learn.register.data.mappers;public class ProfessorMapper {
+package learn.register.data.mappers;
+
+public class ProfessorMapper {
 }
