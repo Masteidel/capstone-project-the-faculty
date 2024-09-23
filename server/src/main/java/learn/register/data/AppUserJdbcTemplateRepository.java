@@ -64,6 +64,18 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     @Override
     public void update(AppUser appUser) {
+    @Transactional
+    public void update(AppUser user) {
+
+        final String sql = "update app_user set "
+                + "username = ?, "
+                + "disabled = ? "
+                + "where app_user_id = ?";
+
+        jdbcTemplate.update(sql,
+                user.getUsername(), !user.isEnabled(), user.getAppUserId().toString());
+
+        updateRoles(user);
     }
 
     private void updateRoles(AppUser user) {
