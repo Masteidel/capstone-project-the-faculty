@@ -3,11 +3,15 @@ package learn.register.data;
 import learn.register.data.mappers.AppUserMapper;
 import learn.register.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
@@ -33,8 +37,29 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
     }
 
     @Override
+    @Transactional
     public AppUser create(AppUser appUser) {
-        return null;
+        final String sql = "insert into app_user (app_user_id, username, password_hash) values (?, ?, ?);";
+
+        UUID appUserID = UUID.randomUUID();
+
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, appUserID.toString());
+            ps.setString(2, appUser.getUsername());
+            ps.setString(3, appUser.getPassword());
+            return ps;
+        });
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        appUser.setAppUserId(appUserID);
+
+        updateRoles(appUser);
+
+        return appUser;
     }
 
     @Override
