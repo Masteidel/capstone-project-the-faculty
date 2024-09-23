@@ -71,7 +71,7 @@ The system is designed for two main users: Professors and Students, with the fol
   - `password_hash`: The hash of the app user's password.
   - `disabled`: Boolean value indicating whether or not the app user's account is enabled.
 
-  - **AppUser**:
+  - **AppRole**:
   - `app_role_id`: A unique identifier for the app role (primary key).
   - `name`: The name of the app role.
 
