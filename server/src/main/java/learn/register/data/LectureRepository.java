@@ -1,15 +1,15 @@
 package learn.register.data;
 
-import learn.register.models.Alias;
+import learn.register.models.Lecture;
 
 import java.util.List;
 
-public interface AliasRepository {
-    List<Alias> findByName(String name);
+public interface LectureRepository {
+    List<Lecture> findBySectionId(int sectionId);
 
-    Alias add(Alias alias);
+    Lecture add(Lecture lecture);
 
-    boolean update(Alias alias);
+    boolean update(Lecture lecture);
 
-    boolean deleteById(int aliasId);
+    boolean deleteById(int lectureId);
 }
