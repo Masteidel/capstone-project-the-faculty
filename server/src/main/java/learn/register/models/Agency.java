@@ -9,7 +9,7 @@ public class Agency {
     private String shortName;
     private String longName;
     private List<Location> locations = new ArrayList<>();
-    private List<AgencyAgent> agents = new ArrayList<>();
+    private List<Student> agents = new ArrayList<>();
 
     public Agency() {
     }
@@ -52,11 +52,11 @@ public class Agency {
         this.locations = locations;
     }
 
-    public List<AgencyAgent> getAgents() {
+    public List<Student> getAgents() {
         return new ArrayList<>(agents);
     }
 
-    public void setAgents(List<AgencyAgent> agents) {
+    public void setAgents(List<Student> agents) {
         this.agents = agents;
     }
 }

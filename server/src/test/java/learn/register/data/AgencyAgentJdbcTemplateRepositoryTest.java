@@ -1,6 +1,6 @@
 package learn.register.data;
 
-import learn.register.models.AgencyAgent;
+import learn.register.models.Student;
 import learn.register.models.Agent;
 import learn.register.models.SecurityClearance;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class AgencyAgentJdbcTemplateRepositoryTest {
 
     @Test
     void shouldAdd() {
-        AgencyAgent agencyAgent = makeAgencyAgent();
+        Student agencyAgent = makeAgencyAgent();
         assertTrue(repository.add(agencyAgent));
 
         try {
@@ -42,7 +42,7 @@ class AgencyAgentJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdate() {
-        AgencyAgent agencyAgent = makeAgencyAgent();
+        Student agencyAgent = makeAgencyAgent();
         agencyAgent.setIdentifier("008"); // avoid duplicates
         agencyAgent.getAgent().setAgentId(1);
         assertTrue(repository.update(agencyAgent));
@@ -57,8 +57,8 @@ class AgencyAgentJdbcTemplateRepositoryTest {
         assertFalse(repository.deleteByKey(1, 3));
     }
 
-    AgencyAgent makeAgencyAgent() {
-        AgencyAgent agencyAgent = new AgencyAgent();
+    Student makeAgencyAgent() {
+        Student agencyAgent = new Student();
         agencyAgent.setAgencyId(1);
         agencyAgent.setIdentifier("007");
         agencyAgent.setActivationDate(LocalDate.of(2010, 6, 19));

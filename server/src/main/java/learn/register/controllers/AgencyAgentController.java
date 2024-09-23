@@ -2,7 +2,7 @@ package learn.register.controllers;
 
 import learn.register.domain.AgencyService;
 import learn.register.domain.Result;
-import learn.register.models.AgencyAgent;
+import learn.register.models.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class AgencyAgentController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody AgencyAgent agencyAgent) {
+    public ResponseEntity<Object> add(@RequestBody Student agencyAgent) {
         Result<Void> result = service.addAgent(agencyAgent);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -28,7 +28,7 @@ public class AgencyAgentController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestBody AgencyAgent agencyAgent) {
+    public ResponseEntity<Object> update(@RequestBody Student agencyAgent) {
         Result<Void> result = service.updateAgent(agencyAgent);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
