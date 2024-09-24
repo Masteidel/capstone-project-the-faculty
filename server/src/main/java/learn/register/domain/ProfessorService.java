@@ -28,82 +28,18 @@ public class ProfessorService {
     }
 
     // Add a new professor
-    public Result<Professor> addProfessor(Professor professor) {
-        Result<Professor> result = validate(professor);
-        if (!result.isSuccess()) {
-            return result;
-        }
-
-        Professor addedProfessor = professorRepository.add(professor);
-
-        if (addedProfessor != null) {
-            result.setType(ResultType.SUCCESS);
-            result.setPayload(addedProfessor);
-        } else {
-            result.setType(ResultType.ERROR);
-            result.setMessage("Could not save the professor.");
-        }
-
-        return result;
+    public Professor addProfessor(Professor professor) {
+        return professorRepository.add(professor);
     }
 
     // Update an existing professor
-    public Result<Professor> updateProfessor(int professorId, Professor professor) {
-        Result<Professor> result = validate(professor);
-        if (!result.isSuccess()) {
-            return result;
-        }
-
-        professor.setProfessorId(professorId); // Set the correct ID
-        boolean updateResult = professorRepository.update(professor);
-
-        if (updateResult) {
-            result.setType(ResultType.SUCCESS);
-        } else {
-            result.setType(ResultType.NOT_FOUND);
-            result.setMessage("Professor not found.");
-        }
-
-        return result;
+    public boolean updateProfessor(int professorId, Professor professor) {
+        professor.setProfessorId(professorId); // Ensure the correct ID is set
+        return professorRepository.update(professor);
     }
 
     // Delete a professor by ID
-    public Result<Void> deleteProfessorById(int professorId) {
-        Result<Void> result = new Result<>();
-        boolean deleteResult = professorRepository.deleteById(professorId);
-
-        if (deleteResult) {
-            result.setType(ResultType.SUCCESS);
-        } else {
-            result.setType(ResultType.NOT_FOUND);
-            result.setMessage("Professor not found.");
-        }
-
-        return result;
-    }
-
-    private Result<Professor> validate(Professor professor) {
-        Result<Professor> result = new Result<>();
-
-        if (professor.getFirstName() == null || professor.getFirstName().trim().isEmpty()) {
-            result.setType(ResultType.INVALID);
-            result.setMessage("First name is required.");
-            return result;
-        }
-
-        if (professor.getLastName() == null || professor.getLastName().trim().isEmpty()) {
-            result.setType(ResultType.INVALID);
-            result.setMessage("Last name is required.");
-            return result;
-        }
-
-        if (professor.getEmail() == null || professor.getEmail().trim().isEmpty()) {
-            result.setType(ResultType.INVALID);
-            result.setMessage("Email is required.");
-            return result;
-        }
-
-        result.setType(ResultType.SUCCESS);
-        return result;
+    public boolean deleteProfessorById(int professorId) {
+        return professorRepository.deleteById(professorId);
     }
 }
