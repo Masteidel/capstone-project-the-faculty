@@ -28,18 +28,82 @@ public class SectionService {
     }
 
     // Add a new section
-    public int addSection(Section section) {
-        return sectionRepository.save(section);
+    public Result<Section> addSection(Section section) {
+        Result<Section> result = validate(section);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        int saveResult = sectionRepository.save(section);
+
+        if (saveResult > 0) {
+            result.setType(ResultType.SUCCESS);
+            result.setPayload(section);
+        } else {
+            result.setType(ResultType.ERROR);
+            result.setMessage("Could not save the section.");
+        }
+
+        return result;
     }
 
     // Update an existing section
-    public int updateSection(Long sectionId, Section section) {
-        section.setSectionId(sectionId); // Ensure the correct ID is set
-        return sectionRepository.update(section);
+    public Result<Section> updateSection(Long sectionId, Section section) {
+        Result<Section> result = validate(section);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        section.setSectionId(sectionId); // Set the correct ID
+        int updateResult = sectionRepository.update(section);
+
+        if (updateResult > 0) {
+            result.setType(ResultType.SUCCESS);
+        } else {
+            result.setType(ResultType.NOT_FOUND);
+            result.setMessage("Section not found.");
+        }
+
+        return result;
     }
 
     // Delete a section by ID
-    public int deleteSectionById(Long sectionId) {
-        return sectionRepository.deleteById(sectionId);
+    public Result<Void> deleteSectionById(Long sectionId) {
+        Result<Void> result = new Result<>();
+        int deleteResult = sectionRepository.deleteById(sectionId);
+
+        if (deleteResult > 0) {
+            result.setType(ResultType.SUCCESS);
+        } else {
+            result.setType(ResultType.NOT_FOUND);
+            result.setMessage("Section not found.");
+        }
+
+        return result;
+    }
+
+    private Result<Section> validate(Section section) {
+        Result<Section> result = new Result<>();
+
+        if (section.getAbbreviation() == null || section.getAbbreviation().trim().isEmpty()) {
+            result.setType(ResultType.INVALID);
+            result.setMessage("Abbreviation is required.");
+            return result;
+        }
+
+        if (section.getStudentCap() <= 0) {
+            result.setType(ResultType.INVALID);
+            result.setMessage("Student capacity must be greater than zero.");
+            return result;
+        }
+
+        if (section.getCourseId() == null) {
+            result.setType(ResultType.INVALID);
+            result.setMessage("Course ID is required.");
+            return result;
+        }
+
+        result.setType(ResultType.SUCCESS);
+        return result;
     }
 }
