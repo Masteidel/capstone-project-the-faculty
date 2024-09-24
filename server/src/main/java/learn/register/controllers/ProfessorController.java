@@ -1,7 +1,7 @@
 package learn.register.controllers;
 
 import learn.register.models.Professor;
-import learn.register.services.ProfessorService;
+import learn.register.domain.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
