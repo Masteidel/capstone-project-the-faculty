@@ -85,7 +85,7 @@ class CourseJdbcTemplateRepositoryTest {
         repository.save(course);
 
         int rowsAffected = repository.deleteById(courseId);
-        
+
         assertEquals(1, rowsAffected);
         assertNull(repository.findById(courseId));
     }
