@@ -6,7 +6,7 @@ function Signup() {
         setAccountType(event.target.value);
     }
 
-return (
+    return (
         <section className="container">
             <form>
                 <fieldset className="form-group">
@@ -63,15 +63,17 @@ return (
                         className="form-control"
                     />
                 </fieldset>
-                <fieldset className="form-group">
-                    <label htmlFor="accessCode">Access Code</label>
-                    <input
-                        id="accessCode"
-                        name="accessCode"
-                        type="text"
-                        className="form-control"
-                    />
-                </fieldset>
+                {accountType === 'professor' && (
+                    <fieldset className="form-group">
+                        <label htmlFor="accessCode">Access Code</label>
+                        <input
+                            id="accessCode"
+                            name="accessCode"
+                            type="text"
+                            className="form-control"
+                        />
+                    </fieldset>
+                )}
                 <fieldset className="form-group">
                     <legend>Account Type</legend>
                     <div>
@@ -102,7 +104,7 @@ return (
                 </div>
             </form>
         </section>
-);
+    );
 }
 
 export default Signup;
