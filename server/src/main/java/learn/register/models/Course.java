@@ -3,7 +3,7 @@ package learn.register.models;
 import java.util.UUID;
 
 public class Course {
-    private UUID courseId;
+    private Long courseId;
     private String name;
     private String subject;
     private int credits;
@@ -11,7 +11,7 @@ public class Course {
     // Constructors
     public Course() {}
 
-    public Course(UUID courseId, String name, String subject, int credits) {
+    public Course(Long courseId, String name, String subject, int credits) {
         this.courseId = courseId;
         this.name = name;
         this.subject = subject;
@@ -19,11 +19,11 @@ public class Course {
     }
 
     // Getters and Setters
-    public UUID getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(UUID courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 

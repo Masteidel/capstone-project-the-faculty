@@ -1,3 +1,4 @@
+/*
 package learn.register.data.mappers;
 
 import learn.register.models.AppRole;
@@ -16,3 +17,4 @@ public class AppRoleMapper implements RowMapper<AppRole> {
         return appRole;
     }
 }
+*/

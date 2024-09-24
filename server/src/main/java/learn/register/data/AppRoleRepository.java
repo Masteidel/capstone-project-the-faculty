@@ -1,3 +1,4 @@
+/*
 package learn.register.data;
 
 import learn.register.models.AppRole;
@@ -11,3 +12,4 @@ public interface AppRoleRepository {
     boolean update(AppRole appRole);
     boolean deleteById(int appRoleId);
 }
+*/

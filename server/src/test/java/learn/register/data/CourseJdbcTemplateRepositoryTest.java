@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @SpringBootTest
 class CourseJdbcTemplateRepositoryTest {
@@ -26,8 +25,8 @@ class CourseJdbcTemplateRepositoryTest {
 
     @Test
     void findAll() {
-        Course course1 = new Course(UUID.randomUUID(), "Math 101", "Mathematics", 3);
-        Course course2 = new Course(UUID.randomUUID(), "History 101", "History", 3);
+        Course course1 = new Course(null, "Math 101", "Mathematics", 3);
+        Course course2 = new Course(null, "History 101", "History", 3);
         repository.save(course1);
         repository.save(course2);
 
@@ -40,7 +39,7 @@ class CourseJdbcTemplateRepositoryTest {
 
     @Test
     void findById() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L; // Assume this ID is assigned after save
         Course course = new Course(courseId, "Math 101", "Mathematics", 3);
         repository.save(course);
 
@@ -53,7 +52,7 @@ class CourseJdbcTemplateRepositoryTest {
 
     @Test
     void save() {
-        Course course = new Course(UUID.randomUUID(), "Math 101", "Mathematics", 3);
+        Course course = new Course(null, "Math 101", "Mathematics", 3);
 
         int rowsAffected = repository.save(course);
 
@@ -63,7 +62,7 @@ class CourseJdbcTemplateRepositoryTest {
 
     @Test
     void update() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
         Course course = new Course(courseId, "Math 101", "Mathematics", 3);
         repository.save(course);
 
@@ -80,7 +79,7 @@ class CourseJdbcTemplateRepositoryTest {
 
     @Test
     void deleteById() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
         Course course = new Course(courseId, "Math 101", "Mathematics", 3);
         repository.save(course);
 

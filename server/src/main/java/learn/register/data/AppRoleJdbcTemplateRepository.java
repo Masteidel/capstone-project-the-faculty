@@ -1,3 +1,4 @@
+/*
 package learn.register.data;
 
 import learn.register.data.mappers.AppRoleMapper;
@@ -73,3 +74,4 @@ public class AppRoleJdbcTemplateRepository implements AppRoleRepository {
         return jdbcTemplate.update(sql, appRoleId) > 0;
     }
 }
+*/

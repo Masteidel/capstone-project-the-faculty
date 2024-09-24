@@ -103,9 +103,9 @@ public class StudentService {
             return result;
         }
 
-        if (student.getYear() <= 0) {
+        if (student.getYear() == null || student.getYear().trim().isEmpty()) {
             result.setType(ResultType.INVALID);
-            result.setMessage("Year must be greater than zero.");
+            result.setMessage("Year is required.");
             return result;
         }
 

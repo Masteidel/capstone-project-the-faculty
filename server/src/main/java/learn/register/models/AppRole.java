@@ -1,3 +1,4 @@
+/*
 package learn.register.models;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -38,3 +39,4 @@ public class AppRole implements GrantedAuthority {
         return name;
     }
 }
+*/
