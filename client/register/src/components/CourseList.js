@@ -23,7 +23,14 @@ function CourseList() {
                     {courses.map(course => (
                         <tr key={course.courseId}>
                             <td>{course.name}</td>
-                            <td></td>
+                            <td>
+                                <Link className="btn btn-outline-primary mr4" to={`/course/${course.courseId}`}>
+                                    View
+                                </Link>
+                                <button className="btn btn-outline-success">
+                                    Enroll
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
