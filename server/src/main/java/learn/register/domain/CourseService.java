@@ -19,14 +19,36 @@ public class CourseService {
     }
 
     // Fetch all courses
-    public List<Course> findAllCourses() {
-        return courseRepository.findAll();
+    public Result<List<Course>> findAllCourses() {
+        Result<List<Course>> result = new Result<>();
+        List<Course> courses = courseRepository.findAll();
+
+        if (courses.isEmpty()) {
+            result.setType(ResultType.NOT_FOUND);
+            result.setMessage("No courses found.");
+        } else {
+            result.setType(ResultType.SUCCESS);
+            result.setPayload(courses);
+        }
+        return result;
     }
 
+
     // Fetch a course by ID
-    public Course findCourseById(UUID courseId) {
-        return courseRepository.findById(courseId);
+    public Result<Course> findCourseById(UUID courseId) {
+        Result<Course> result = new Result<>();
+        Course course = courseRepository.findById(courseId);
+
+        if (course == null) {
+            result.setType(ResultType.NOT_FOUND);
+            result.setMessage("Course not found.");
+        } else {
+            result.setType(ResultType.SUCCESS);
+            result.setPayload(course);
+        }
+        return result;
     }
+
 
     // Add a new course
     public Result<Course> addCourse(Course course) {

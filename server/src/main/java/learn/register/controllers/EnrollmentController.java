@@ -1,7 +1,8 @@
 package learn.register.controllers;
 
+import learn.register.domain.Result;
 import learn.register.models.Enrollment;
-import learn.register.services.EnrollmentService;
+import learn.register.domain.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,31 +39,31 @@ public class EnrollmentController {
 
     // POST - Add a new enrollment
     @PostMapping
-    public ResponseEntity<Enrollment> addEnrollment(@RequestBody Enrollment enrollment) {
-        int result = enrollmentService.addEnrollment(enrollment);
-        if (result > 0) {
-            return new ResponseEntity<>(enrollment, HttpStatus.CREATED);
+    public ResponseEntity<?> addEnrollment(@RequestBody Enrollment enrollment) {
+        Result<Enrollment> result = enrollmentService.addEnrollment(enrollment);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(result.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // PUT - Update an existing enrollment
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEnrollment(@PathVariable Long id, @RequestBody Enrollment enrollment) {
-        int result = enrollmentService.updateEnrollment(id, enrollment);
-        if (result > 0) {
+    public ResponseEntity<?> updateEnrollment(@PathVariable Long id, @RequestBody Enrollment enrollment) {
+        Result<Enrollment> result = enrollmentService.updateEnrollment(id, enrollment);
+        if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(result.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // DELETE - Remove an enrollment by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        int result = enrollmentService.deleteEnrollmentById(id);
-        if (result > 0) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        Result<Void> result = enrollmentService.deleteEnrollmentById(id);
+        if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(result.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
