@@ -128,8 +128,8 @@ insert into professor (professor_id, first_name, last_name, email, phone, app_us
 ('2', 'Rebecca', 'Brown', 'rebecca.brown@gmail.com', '942-555-4321', '4');
 
 insert into course (course_id, name, subject, credits) values
-('1', 'Intro to Programming', 'CS', 3),
-('2', 'Calculus I', 'MATH', 4);
+(UUID(), 'Intro to Programming', 'CS', 3),
+(UUID(), 'Calculus I', 'MATH', 4);
 
 insert into section (section_id, abbreviation, student_cap, course_id, professor_id) values
 ('1', 'A', 30, '1', '1'), -- Section A of Intro to Programming taught by Prof. Davis

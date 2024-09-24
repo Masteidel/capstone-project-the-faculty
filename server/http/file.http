@@ -1,0 +1,2 @@
+curl -u user:5ed436b7-5702-42e7-992e-82d57d81ec7b -X GET http://localhost:8080/api/courses
+
