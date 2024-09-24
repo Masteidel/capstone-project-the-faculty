@@ -1,5 +1,11 @@
 function Signup() {
 
+    const [accountType, setAccountType] = React.useState('');
+
+    const handleAccountTypeChange = (event) => {
+        setAccountType(event.target.value);
+    }
+
 return (
         <section className="container">
             <form>
@@ -74,6 +80,7 @@ return (
                             id="professor"
                             name="role"
                             value="professor"
+                            onChange={handleAccountTypeChange}
                         />
                         <label htmlFor="professor">Professor</label>
                     </div>
@@ -83,6 +90,7 @@ return (
                             id="student"
                             name="role"
                             value="student"
+                            onChange={handleAccountTypeChange}
                         />
                         <label htmlFor="student">Student</label>
                     </div>
