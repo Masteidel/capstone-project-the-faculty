@@ -1,13 +1,16 @@
 ## Capstone Proposal
 
 # 1. Problem Statement
-Being able to enroll in courses provided by professors.
+Keeping track of what professors are teaching what courses and when, and what students are enrolled in each course and when can be difficult and confusing. Without some method of tracking this and preventative measures, it is very easy to double book or over book classes. For instance, professors could be scheduled to teach multiple classes at the same time, or students may enroll in courses that have already reached their maximum capacity. These may create challenges that could lead to administrative headaches, scheduling conflicts, and confusion for students and faculty. Having a way to properly track and prevent these issues is essential to ensure courses are properly managed, where both students and professors have conflict-free schedules.
 
 # 2. Technical Solution
-Using MySQL as a database, Java for the backend, and React for the frontend, while saving data to AWS. Additionally, we will be using the SendGrid API to send registration confirmation emails to students for the upcoming semester.
+Use a database to keep track of what professors are teaching what courses and at what times. A professor can teach a course by creating a section of that course with a given maximum number of students and assigning lectures that take place on given days of the week at given times. Using Java for validation, the application will prevent the same professor from teaching multiple lectures at the same time. Multiple professors can teach the same course at the same times. Likewise students cannot enroll in a section of a course that has lectures at the same time as another section that they are enrolled in. Students cannot enroll in a section that has the maximum number of students. Students can be removed from a section by themselves or by the professor of that section.
 
-## Scenario 1
-A student wants to sign up for classes for the following semester. The college uses our registration website in order to sign up for classes. They can view the professor teaching the class, the time the class starts and ends, how many credits the class is worth, and the number of students enrolled.
+# Scenario for student
+A student wants to sign up for classes for the following semester, the college uses our registration website in order to sign up for classes. They can view the professor teaching the class, the time the class starts and ends, how many credits the class is worth, and the amount of students enrolled.
+
+# Scenario for Professor
+A Professor wants to create a new course, they select what type of course this is going to be (math, science, history, ect). The name of the course, and any details that could help explain information about the course for the student. Next the professor changes how many credits the course will be worth, which will contribute to how many courses a student can take. Lastly they set the amount of the students who can register for there course, once this class is posted they can alter the section the course will take place in. Whether that be in the am or pm section.
 
 # 3. Glossary
 
@@ -42,9 +45,8 @@ A student wants to sign up for classes for the following semester. The college u
 
 **Section**: Represents a more detailed specific offering of the course, including the location, the professor, and the maximum number of students
 - `section_id (pk)`
-- `name`
+- `abbreviation`
 - `student_cap`
-- `building`
 - `course_id (fk)`
 - `professor_id (fk)`
 
@@ -60,12 +62,14 @@ A student wants to sign up for classes for the following semester. The college u
 
 Briefly describe what each user role/authority can do. (These are user stories.)
 
-- Create a course (Professor)
-- Register for a course (Student, Professor)
-- Edit a future course (Student, Professor)
-- Cancel a course (Student, Professor)
+- Create a course (Professor) - The Professor can create a brand new course 
+- Create a section for a course (Professor) - The Professor can create a brand new section for a specific course
+- Create a lecture for a section (Professor) - The Professor can create a brand new lecture for a specific section 
+- Edit a future section (Student, Professor) - Professor can edit a section by changing student limit and lecture time and day
+- Delete a section (Professor) - The Professor can delete his involvement in a section meaning he won't be teaching it anymore
+- Un-enroll a student from an existing section (Student, Professor) - The Student and Professor can both un-enroll that student from a section
 - Browse Courses (Anyone)
-- Sign up for a course (Authenticated user)
+- Sign up for a course (Authenticated user) - In order to sign up for a section student must be logged in
 
 # 5. User Stories/Scenarios
 
@@ -73,25 +77,33 @@ Briefly describe what each user role/authority can do. (These are user stories.)
 Create a course that students can join.
 
 - Brief description of the course (e.g., Intro to Abstract Math)
-- Date and time (in the future)
-- Location (based on building numbers: Building A - Math, Building B - Science, Building C - History, Building D - English)
+- Days and time
 - Maximum students
-- Number of credits (1-4)
+- Number of credits (1–4)
 
 **Precondition**: User must be logged in as a Professor.  
 **Post-condition**: If the user is a Professor, they can create a course for everyone else to see.
 
-## Edit a Course
-Can only edit a course in the future.
+## Create a section
+Create a section for students to join
+- Choose a course to teach
+- Set the maximum number of students
 
-**Precondition**: User must be logged in as a Professor. The course must be in the future.  
-**Post-condition**: If the user is a Professor, they can edit a course from the future for everyone else to see.
+**Precondition**: The user must be logged as a Professor.
+**Post-condition**: If the user is a Professor they can create a section for a course for everyone to see.
 
-## Cancel a Course Enrollment
-Can only cancel a course in the future.
 
-**Precondition**: User must be logged in as a Student or Professor. The course date/time must be in the future.  
-**Post-condition**: The course is not deleted. The student is removed from enrollment in that course.
+## Edit a Section
+- Edit the student cap
+
+**Precondition**: User must be logged in as a Professor.
+**Post-condition**: If the user is a Professor, they can edit a course for everyone else to see.
+
+## Cancel a Section Enrollment
+- Remove a student from a section
+
+**Precondition**: User must be logged in as a Student or Professor. 
+**Post-condition**: The section is not deleted. The student is removed from enrollment in that course.
 
 ## Browse Courses
 Display available courses to anyone using the application.
