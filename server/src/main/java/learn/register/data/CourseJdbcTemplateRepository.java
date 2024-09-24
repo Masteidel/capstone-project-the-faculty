@@ -31,13 +31,14 @@ public class CourseJdbcTemplateRepository implements CourseRepository {
 
     @Override
     public int save(Course course) {
-        final String sql = "INSERT INTO course (course_id, name, subject, credits) VALUES (?, ?, ?, ?)";
+        // Assuming course_id is auto-generated, do not include it in the insert statement
+        final String sql = "INSERT INTO course (name, subject, credits) VALUES (?, ?, ?)";
         return jdbcTemplate.update(sql,
-                course.getCourseId().toString(),
                 course.getName(),
                 course.getSubject(),
                 course.getCredits());
     }
+
 
     @Override
     public int update(Course course) {
