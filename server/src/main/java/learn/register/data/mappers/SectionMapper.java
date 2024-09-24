@@ -11,11 +11,11 @@ public class SectionMapper implements RowMapper<Section> {
     @Override
     public Section mapRow(ResultSet resultSet, int i) throws SQLException {
         Section section = new Section();
-        section.setSectionId(resultSet.getLong("section_id"));
+        section.setSectionId(resultSet.getString("section_id"));  // Map UUID as String
         section.setAbbreviation(resultSet.getString("abbreviation"));
         section.setStudentCap(resultSet.getInt("student_cap"));
-        section.setCourseId(resultSet.getLong("course_id"));
-        section.setProfessorId(resultSet.getLong("professor_id"));
+        section.setCourseId(resultSet.getString("course_id"));    // Map UUID as String
+        section.setProfessorId(resultSet.getString("professor_id")); // Map UUID as String
         return section;
     }
 }

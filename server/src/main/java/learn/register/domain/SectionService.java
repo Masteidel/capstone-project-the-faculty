@@ -23,7 +23,7 @@ public class SectionService {
     }
 
     // Fetch a section by ID
-    public Section findSectionById(Long sectionId) {
+    public Section findSectionById(String sectionId) {
         return sectionRepository.findById(sectionId);
     }
 
@@ -33,13 +33,13 @@ public class SectionService {
     }
 
     // Update an existing section
-    public int updateSection(Long sectionId, Section section) {
+    public int updateSection(String sectionId, Section section) {
         section.setSectionId(sectionId); // Ensure the correct ID is set
         return sectionRepository.update(section);
     }
 
     // Delete a section by ID
-    public int deleteSectionById(Long sectionId) {
+    public String deleteSectionById(String sectionId) {
         return sectionRepository.deleteById(sectionId);
     }
 }
