@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -30,17 +31,14 @@ class CourseServiceTest {
         course.setSubject("Math");
         course.setCredits(3);
 
-        Course mockOut = new Course();
-        mockOut.setCourseId(UUID.randomUUID());
-        mockOut.setName("Test Course");
-        mockOut.setSubject("Math");
-        mockOut.setCredits(3);
-
+        // Mock what the repository will save, after the service generates the UUID.
         when(courseRepository.save(course)).thenReturn(1);
 
         Result<Course> actual = service.addCourse(course);
         assertEquals(ResultType.SUCCESS, actual.getType());
-        assertEquals(mockOut.getCourseId(), actual.getPayload().getCourseId());
+
+        // Now check that the actual payload has a non-null courseId.
+        assertNotNull(actual.getPayload().getCourseId());
     }
 
     @Test

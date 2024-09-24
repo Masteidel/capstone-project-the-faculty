@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -58,6 +59,9 @@ class EnrollmentServiceTest {
 
         Result<Enrollment> actual = service.updateEnrollment(1L, enrollment);
         assertEquals(ResultType.SUCCESS, actual.getType());
+
+        // Ensure that the updated Enrollment object is returned in the payload
+        assertNotNull(actual.getPayload());
         assertEquals("Updated Status", actual.getPayload().getStatus());
     }
 
