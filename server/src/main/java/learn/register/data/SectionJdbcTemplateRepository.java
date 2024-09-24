@@ -23,7 +23,7 @@ public class SectionJdbcTemplateRepository implements SectionRepository {
     }
 
     @Override
-    public Section findById(Long sectionId) {
+    public Section findById(String sectionId) {
         final String sql = "SELECT * FROM section WHERE section_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{sectionId}, new SectionMapper());
     }
@@ -44,14 +44,16 @@ public class SectionJdbcTemplateRepository implements SectionRepository {
         return jdbcTemplate.update(sql,
                 section.getAbbreviation(),
                 section.getStudentCap(),
-                section.getCourseId(),
-                section.getProfessorId(),
-                section.getSectionId());
+                section.getCourseId(),     // UUID as String
+                section.getProfessorId(),  // UUID as String
+                section.getSectionId());   // UUID as String
     }
 
     @Override
-    public int deleteById(Long sectionId) {
+    public String deleteById(String sectionId) {
         final String sql = "DELETE FROM section WHERE section_id = ?";
-        return jdbcTemplate.update(sql, sectionId);
+        int rowsAffected = jdbcTemplate.update(sql, sectionId);
+
+        return rowsAffected > 0 ? "Delete successful" : "Delete failed";
     }
 }

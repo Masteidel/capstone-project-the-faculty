@@ -28,7 +28,7 @@ public class SectionController {
 
     // GET section by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Section> findById(@PathVariable Long id) {
+    public ResponseEntity<Section> findById(@PathVariable String id) {
         Section section = sectionService.findSectionById(id);
         if (section == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class SectionController {
 
     // PUT - Update an existing section
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateSection(@PathVariable Long id, @RequestBody Section section) {
+    public ResponseEntity<Void> updateSection(@PathVariable String id, @RequestBody Section section) {
         int result = sectionService.updateSection(id, section);
         if (result > 0) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -57,12 +57,13 @@ public class SectionController {
     }
 
     // DELETE - Remove a section by ID
+    // DELETE - Remove a section by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        int result = sectionService.deleteSectionById(id);
-        if (result > 0) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        String result = sectionService.deleteSectionById(id);
+        if ("Delete successful".equals(result)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for success
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found for failure
     }
 }
