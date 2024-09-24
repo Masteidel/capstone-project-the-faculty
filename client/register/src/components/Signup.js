@@ -1,5 +1,6 @@
 function Signup() {
-    return (
+
+return (
         <section className="container">
             <form>
                 <fieldset className="form-group">
@@ -57,6 +58,15 @@ function Signup() {
                     />
                 </fieldset>
                 <fieldset className="form-group">
+                    <label htmlFor="accessCode">Access Code</label>
+                    <input
+                        id="accessCode"
+                        name="accessCode"
+                        type="text"
+                        className="form-control"
+                    />
+                </fieldset>
+                <fieldset className="form-group">
                     <legend>Account Type</legend>
                     <div>
                         <input
@@ -84,7 +94,7 @@ function Signup() {
                 </div>
             </form>
         </section>
-    );
+);
 }
 
 export default Signup;
