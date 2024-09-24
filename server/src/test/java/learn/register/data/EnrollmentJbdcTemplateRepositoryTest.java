@@ -5,65 +5,100 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class EnrollmentJdbcTemplateRepositoryTest {
 
     @Autowired
     EnrollmentJdbcTemplateRepository repository;
 
-    Enrollment enrollment;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        enrollment = new Enrollment();
-        enrollment.setStatus("Enrolled");
-        enrollment.setStudentId(1L);
-        enrollment.setSectionId(1L);
+        // Optional cleanup if needed: you can truncate or reset tables here
+        jdbcTemplate.update("DELETE FROM enrollment");
     }
 
     @Test
     void shouldFindAll() {
+        // Insert a couple of enrollments for testing
+        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
+                "Enrolled", 1L, 1L);
+        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
+                "Waitlisted", 2L, 2L);
+
         List<Enrollment> enrollments = repository.findAll();
         assertNotNull(enrollments);
-        assertTrue(enrollments.size() > 0);
+        assertEquals(2, enrollments.size());
     }
 
     @Test
     void shouldFindById() {
-        Enrollment enrollment = repository.findById(1L);
+        // Insert an enrollment and get the ID
+        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
+                "Enrolled", 1L, 1L);
+        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
+
+        Enrollment enrollment = repository.findById(enrollmentId);
         assertNotNull(enrollment);
+        assertEquals(enrollmentId, enrollment.getEnrollmentId());
         assertEquals("Enrolled", enrollment.getStatus());
     }
 
     @Test
-    void shouldSaveEnrollment() {
-        int saved = repository.save(enrollment);
-        assertTrue(saved > 0); // or assertNotNull(saved.getEnrollmentId()) if you modify save() to return the Enrollment
+    void shouldSave() {
+        Enrollment enrollment = new Enrollment();
+        enrollment.setStatus("Enrolled");
+        enrollment.setStudentId(1L); // Use valid student_id
+        enrollment.setSectionId(1L); // Use valid section_id
+
+        int rowsAffected = repository.save(enrollment);
+        assertEquals(1, rowsAffected); // Should insert 1 row
+
+        // Verify insertion
+        Long newEnrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
+        Enrollment insertedEnrollment = repository.findById(newEnrollmentId);
+        assertEquals("Enrolled", insertedEnrollment.getStatus());
+        assertEquals(1L, insertedEnrollment.getStudentId());
+        assertEquals(1L, insertedEnrollment.getSectionId());
     }
 
     @Test
-    void shouldUpdateEnrollment() {
-        enrollment.setEnrollmentId(1L); // Set an existing ID to update
-        enrollment.setStatus("Waitlisted");
+    void shouldUpdate() {
+        // Insert an enrollment and get the ID
+        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
+                "Enrolled", 1L, 1L);
+        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
 
-        int result = repository.update(enrollment);
-        assertEquals(1, result); // Verifying one row is updated
+        Enrollment enrollment = repository.findById(enrollmentId);
+        enrollment.setStatus("Updated Status");
 
-        Enrollment updatedEnrollment = repository.findById(1L);
-        assertEquals("Waitlisted", updatedEnrollment.getStatus());
+        int rowsAffected = repository.update(enrollment);
+        assertEquals(1, rowsAffected);
+
+        // Verify update
+        Enrollment updatedEnrollment = repository.findById(enrollmentId);
+        assertEquals("Updated Status", updatedEnrollment.getStatus());
     }
 
     @Test
     void shouldDeleteById() {
-        int result = repository.deleteById(1L); // Assuming there is an enrollment with ID 1
-        assertEquals(1, result);
+        // Insert an enrollment and get the ID
+        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
+                "Enrolled", 1L, 1L);
+        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
 
-        Enrollment deletedEnrollment = repository.findById(1L);
-        assertNull(deletedEnrollment);
+        int rowsAffected = repository.deleteById(enrollmentId);
+        assertEquals(1, rowsAffected);
+
+        // Verify deletion
+        assertThrows(Exception.class, () -> repository.findById(enrollmentId));
     }
 }
