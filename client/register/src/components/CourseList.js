@@ -44,9 +44,6 @@ function CourseList() {
                                 <Link className="btn btn-outline-primary mr4" to={`/course/${course.courseId}`}>
                                     View
                                 </Link>
-                                <button className="btn btn-outline-success">
-                                    Enroll
-                                </button>
                             </td>
                         </tr>
                     ))}
