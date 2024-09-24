@@ -59,9 +59,7 @@ create table professor (
 create table course (
 	course_id varchar(36) primary key,
     `name` varchar(250) not null,
-    `description` varchar(2048) not null,
     `subject` varchar(100) not null,
-    `number` varchar(10) not null,
     credits int not null
 );
 
@@ -129,9 +127,9 @@ insert into professor (professor_id, first_name, last_name, email, phone, app_us
 ('1', 'David', 'Davis', 'david.davis@gmail.com', '952-555-8765', '3'),
 ('2', 'Rebecca', 'Brown', 'rebecca.brown@gmail.com', '942-555-4321', '4');
 
-insert into course (course_id, name, description, subject, number, credits) values
-('1', 'Intro to Programming', 'Introduction to programming concepts', 'CS', '101', 3),
-('2', 'Calculus I', 'Fundamentals of calculus', 'MATH', '201', 4);
+insert into course (course_id, name, subject, credits) values
+('1', 'Intro to Programming', 'CS', 3),
+('2', 'Calculus I', 'MATH', 4);
 
 insert into section (section_id, abbreviation, student_cap, course_id, professor_id) values
 ('1', 'A', 30, '1', '1'), -- Section A of Intro to Programming taught by Prof. Davis
