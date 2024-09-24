@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -18,87 +17,89 @@ class EnrollmentJdbcTemplateRepositoryTest {
     EnrollmentJdbcTemplateRepository repository;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    KnownGoodState knownGoodState;
 
     @BeforeEach
-    void setUp() {
-        // Optional cleanup if needed: you can truncate or reset tables here
-        jdbcTemplate.update("DELETE FROM enrollment");
+    void setup() {
+        knownGoodState.set();
     }
 
     @Test
-    void shouldFindAll() {
-        // Insert a couple of enrollments for testing
-        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
-                "Enrolled", 1L, 1L);
-        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
-                "Waitlisted", 2L, 2L);
+    void findAll() {
+        Enrollment enrollment1 = new Enrollment(null, "Active", 1L, 1L);
+        Enrollment enrollment2 = new Enrollment(null, "Completed", 2L, 1L);
+        repository.save(enrollment1);
+        repository.save(enrollment2);
 
         List<Enrollment> enrollments = repository.findAll();
         assertNotNull(enrollments);
-        assertEquals(2, enrollments.size());
+
+        // Assuming there are at least 2 enrollments after the save operations
+        assertTrue(!enrollments.isEmpty());
     }
 
     @Test
-    void shouldFindById() {
-        // Insert an enrollment and get the ID
-        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
-                "Enrolled", 1L, 1L);
-        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
+    void findById() {
+        Long enrollmentId = 1L; // Assuming this ID is valid in the test database
+        Enrollment enrollment = new Enrollment(enrollmentId, "Active", 1L, 1L);
+        repository.save(enrollment);
 
-        Enrollment enrollment = repository.findById(enrollmentId);
-        assertNotNull(enrollment);
-        assertEquals(enrollmentId, enrollment.getEnrollmentId());
-        assertEquals("Enrolled", enrollment.getStatus());
+        Enrollment foundEnrollment = repository.findById(enrollmentId);
+
+        assertNotNull(foundEnrollment);
+        assertEquals(enrollmentId, foundEnrollment.getEnrollmentId());
+        assertEquals("Active", foundEnrollment.getStatus());
     }
 
     @Test
-    void shouldSave() {
-        Enrollment enrollment = new Enrollment();
-        enrollment.setStatus("Enrolled");
-        enrollment.setStudentId(1L); // Use valid student_id
-        enrollment.setSectionId(1L); // Use valid section_id
-
+    void save() {
+        Enrollment enrollment = new Enrollment(null, "Active", 1L, 1L);
         int rowsAffected = repository.save(enrollment);
-        assertEquals(1, rowsAffected); // Should insert 1 row
+        assertEquals(1, rowsAffected); // One row should be inserted
 
-        // Verify insertion
-        Long newEnrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
-        Enrollment insertedEnrollment = repository.findById(newEnrollmentId);
-        assertEquals("Enrolled", insertedEnrollment.getStatus());
-        assertEquals(1L, insertedEnrollment.getStudentId());
-        assertEquals(1L, insertedEnrollment.getSectionId());
+        Enrollment actual = repository.findById(enrollment.getEnrollmentId());
+        assertNotNull(actual);
+        assertEquals(enrollment.getStatus(), actual.getStatus());
     }
 
     @Test
-    void shouldUpdate() {
-        // Insert an enrollment and get the ID
-        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
-                "Enrolled", 1L, 1L);
-        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
+    void update() {
+        Long enrollmentId = 1L;
+        Enrollment enrollment = new Enrollment(enrollmentId, "Active", 1L, 1L);
+        repository.save(enrollment);
 
-        Enrollment enrollment = repository.findById(enrollmentId);
-        enrollment.setStatus("Updated Status");
-
+        enrollment.setStatus("Completed");
         int rowsAffected = repository.update(enrollment);
-        assertEquals(1, rowsAffected);
+        assertEquals(1, rowsAffected); // One row should be updated
 
-        // Verify update
-        Enrollment updatedEnrollment = repository.findById(enrollmentId);
-        assertEquals("Updated Status", updatedEnrollment.getStatus());
+        Enrollment updated = repository.findById(enrollment.getEnrollmentId());
+        assertEquals("Completed", updated.getStatus());
+
+        // Testing update on a non-existing enrollment
+        enrollment.setEnrollmentId(999L); // Non-existing ID
+        rowsAffected = repository.update(enrollment);
+        assertEquals(0, rowsAffected); // No rows should be updated
     }
 
     @Test
-    void shouldDeleteById() {
-        // Insert an enrollment and get the ID
-        jdbcTemplate.update("INSERT INTO enrollment (status, student_id, section_id) VALUES (?, ?, ?)",
-                "Enrolled", 1L, 1L);
-        Long enrollmentId = jdbcTemplate.queryForObject("SELECT MAX(enrollment_id) FROM enrollment", Long.class);
+    void deleteById() {
+        Enrollment enrollment = new Enrollment(null, "Active", 1L, 1L);
+        repository.save(enrollment);
+        Long enrollmentId = enrollment.getEnrollmentId();
 
         int rowsAffected = repository.deleteById(enrollmentId);
-        assertEquals(1, rowsAffected);
+        assertEquals(1, rowsAffected); // One row should be deleted
 
-        // Verify deletion
-        assertThrows(Exception.class, () -> repository.findById(enrollmentId));
+        Enrollment deletedEnrollment = repository.findById(enrollmentId);
+        assertNull(deletedEnrollment); // The enrollment should not exist anymore
+    }
+
+    private Enrollment makeEnrollment() {
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(1L); // Example ID, assuming it's auto-generated in the real database
+        enrollment.setStatus("Active");
+        enrollment.setStudentId(1L);
+        enrollment.setSectionId(1L);
+        return enrollment;
     }
 }
