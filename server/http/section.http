@@ -1,0 +1,57 @@
+### Define password variable
+# # PASSWORD = e837b6da-c98c-4e08-a408-bc9ce27a9901
+@url = http://localhost:8080/api/sections
+
+### GET all sections
+#curl -u user:${PASSWORD} -X GET http://localhost:8080/api/sections
+GET {{url}} HTTP/1.1
+
+### GET section with specific ID
+#curl -u user:${PASSWORD} -X GET http://localhost:8080/api/sections/2
+GET {{url}}/2 HTTP/1.1
+
+### POST a section
+#curl -u user:${PASSWORD} -X POST http://localhost:8080/api/sections \
+#-H "Content-Type: application/json" \
+#-d '{
+#  "sectionId": 3,
+#  "abbreviation": "C",
+#  "studentCap": 30,
+#  "courseId": 3,
+#  "professorId": 2
+#}'
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "abbreviation": "A",
+    "studentCap": 30,
+    "courseId": 1,
+    "professorId": 2
+}
+
+
+### PUT section
+#curl -u user:${PASSWORD} -X PUT http://localhost:8080/api/sections/2 \
+#-H "Content-Type: application/json" \
+#-d '{
+#  "sectionId": 3,
+#  "abbreviation": "C",
+#  "studentCap": 31,
+#  "courseId": 3,
+#  "professorId": 2
+#}'
+PUT {{url}}/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "abbreviation": "B",
+    "studentCap": 35,
+    "courseId": 1,
+    "professorId": 2
+}
+
+
+### DELETE section
+#curl -u user:${PASSWORD} -X DELETE http://localhost:8080/api/sections/3
+DELETE {{url}}/3 HTTP/1.1

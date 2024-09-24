@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -30,7 +29,7 @@ public class CourseController {
 
     // GET course by ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable UUID id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         Result<Course> result = courseService.findCourseById(id);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
@@ -52,7 +51,7 @@ public class CourseController {
 
     // PUT - Update an existing course
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCourse(@PathVariable UUID id, @RequestBody Course course) {
+    public ResponseEntity<?> updateCourse(@PathVariable Long id, @RequestBody Course course) {
         Result<Course> result = courseService.updateCourse(id, course);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -63,7 +62,7 @@ public class CourseController {
 
     // DELETE - Remove a course by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
         Result<Void> result = courseService.deleteCourseById(id);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

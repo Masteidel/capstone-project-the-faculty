@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface CourseRepository {
     List<Course> findAll();
-    Course findById(UUID courseId);
+    Course findById(Long courseId);
     int save(Course course);
     int update(Course course);
-    int deleteById(UUID courseId);
+    int deleteById(Long courseId);
 }

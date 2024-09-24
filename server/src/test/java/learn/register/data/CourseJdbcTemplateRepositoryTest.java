@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +27,14 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldFindAll() {
+
+    void findAll() {
+        Course course1 = new Course(null, "Math 101", "Mathematics", 3);
+        Course course2 = new Course(null, "History 101", "History", 3);
+        repository.save(course1);
+        repository.save(course2);
+
+
         List<Course> courses = repository.findAll();
         assertNotNull(courses);
 
@@ -37,17 +43,22 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldFindSpecificCourse() {
-        UUID courseId = UUID.fromString("some-existing-course-id"); // Replace with an actual course ID from the known good state
-        Course course = repository.findById(courseId);
-        assertEquals(courseId, course.getCourseId());
-        assertEquals("Introduction to Programming", course.getName()); // Adjust according to your expected data
-        assertEquals(4, course.getCredits()); // Assuming the credits are 4
+
+    void findById() {
+        Long courseId = 1L; // Assume this ID is assigned after save
+        Course course = new Course(courseId, "Math 101", "Mathematics", 3);
+        repository.save(course);
+
+        Course foundCourse = repository.findById(courseId);
+
+        assertNotNull(foundCourse);
+        assertEquals(courseId, foundCourse.getCourseId());
+        assertEquals("Math 101", foundCourse.getName());
     }
 
     @Test
-    void shouldAdd() {
-        Course course = makeCourse();
+    void save() {
+        Course course = new Course(null, "Math 101", "Mathematics", 3);
         int rowsAffected = repository.save(course);
         assertEquals(1, rowsAffected); // One row should be inserted
 
@@ -58,9 +69,14 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldUpdate() {
-        Course course = makeCourse();
-        course.setCourseId(UUID.fromString("existing-course-id")); // Replace with actual ID from known good state
+
+    void update() {
+        Long courseId = 1L;
+        Course course = new Course(courseId, "Math 101", "Mathematics", 3);
+        repository.save(course);
+
+        course.setName("Math 201");
+        course.setCredits(4);
         int rowsAffected = repository.update(course);
         assertEquals(1, rowsAffected); // 1 row should be updated
 
@@ -75,10 +91,11 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldDelete() {
-        // Use a known UUID from your known good state
-        UUID courseId = UUID.fromString("f47ac10b-58cc-4372-a567-0e02b2c3d479");
 
+    void deleteById() {
+        Long courseId = 1L;
+        Course course = new Course(courseId, "Math 101", "Mathematics", 3);
+        repository.save(course);
         int rowsAffected = repository.deleteById(courseId);
         assertEquals(1, rowsAffected); // One row should be deleted
 

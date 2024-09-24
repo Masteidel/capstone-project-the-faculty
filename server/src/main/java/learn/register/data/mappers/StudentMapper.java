@@ -18,7 +18,7 @@ public class StudentMapper implements RowMapper<Student> {
         student.setEmail(resultSet.getString("email"));
         student.setPhone(resultSet.getString("phone"));
         student.setMajor(resultSet.getString("major"));
-        student.setYear(resultSet.getInt("year"));
+        student.setYear(resultSet.getString("year"));
         student.setCredits(resultSet.getInt("credits"));
 
         return student;

@@ -24,20 +24,21 @@ public class CourseJdbcTemplateRepository implements CourseRepository {
     }
 
     @Override
-    public Course findById(UUID courseId) {
+    public Course findById(Long courseId) { // Change UUID to Long
         final String sql = "SELECT * FROM course WHERE course_id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{courseId.toString()}, new CourseMapper());
+        return jdbcTemplate.queryForObject(sql, new Object[]{courseId}, new CourseMapper());
     }
 
     @Override
     public int save(Course course) {
-        final String sql = "INSERT INTO course (course_id, name, subject, credits) VALUES (?, ?, ?, ?)";
+        // Assuming course_id is auto-generated, do not include it in the insert statement
+        final String sql = "INSERT INTO course (name, subject, credits) VALUES (?, ?, ?)";
         return jdbcTemplate.update(sql,
-                course.getCourseId().toString(),
                 course.getName(),
                 course.getSubject(),
                 course.getCredits());
     }
+
 
     @Override
     public int update(Course course) {
@@ -50,7 +51,7 @@ public class CourseJdbcTemplateRepository implements CourseRepository {
     }
 
     @Override
-    public int deleteById(UUID courseId) {
+    public int deleteById(Long courseId) {
         final String sql = "DELETE FROM course WHERE course_id = ?";
         return jdbcTemplate.update(sql, courseId.toString());
     }

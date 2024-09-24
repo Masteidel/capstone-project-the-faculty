@@ -26,7 +26,7 @@ class StudentJdbcTemplateRepositoryTest {
         student.setEmail("john.doe@example.com");
         student.setPhone("123-456-7890");
         student.setMajor("Computer Science");
-        student.setYear(3);
+        student.setYear("Junior");
         student.setCredits(15);
     }
 

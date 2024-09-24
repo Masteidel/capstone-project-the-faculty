@@ -8,13 +8,13 @@ public class Student {
     private String email;
     private String phone;
     private String major;
-    private int year;
+    private String year;
     private int credits;
 
     // Constructors, Getters, and Setters
     public Student() {}
 
-    public Student(Long studentId, String firstName, String lastName, String email, String phone, String major, int year, int credits) {
+    public Student(Long studentId, String firstName, String lastName, String email, String phone, String major, String year, int credits) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,11 +73,11 @@ public class Student {
         this.major = major;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
