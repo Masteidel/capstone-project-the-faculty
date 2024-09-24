@@ -93,6 +93,7 @@ create table enrollment (
         references section(section_id)
 );
 
+
 -- Insert data into tables
 insert into app_user (username, password_hash, disabled) values
 ('user1', 'hash1', 0),
@@ -105,6 +106,7 @@ insert into app_role (`name`) values
 ('ROLE_PROFESSOR');
 
 insert into app_user_role (app_user_id, app_role_id) values
+
 (1, 1),
 (2, 1),
 (3, 2),

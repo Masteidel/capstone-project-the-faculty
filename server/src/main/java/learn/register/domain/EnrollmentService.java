@@ -59,6 +59,7 @@ public class EnrollmentService {
 
         if (updateResult > 0) {
             result.setType(ResultType.SUCCESS);
+            result.setPayload(enrollment); // Set the updated enrollment as the payload
         } else {
             result.setType(ResultType.NOT_FOUND);
             result.setMessage("Enrollment not found.");
