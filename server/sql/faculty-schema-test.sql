@@ -95,6 +95,85 @@ create table enrollment (
 );
 
 
+delimiter //
+
+-- 2. Create the known good state procedure
+create procedure set_known_good_state()
+begin
+    -- Reset tables and auto-increment values
+    delete from enrollment;
+    delete from lecture;
+    delete from section;
+    alter table section auto_increment = 1;
+    delete from course;
+    alter table course auto_increment = 1;
+    delete from professor;
+    alter table professor auto_increment = 1;
+    delete from student;
+    alter table student auto_increment = 1;
+    delete from app_user_role;
+    delete from app_role;
+    alter table app_role auto_increment = 1;
+    delete from app_user;
+    alter table app_user auto_increment = 1;
+
+    -- Insert predefined data for app_user
+    insert into app_user (username, password_hash, disabled) values
+    ('user1', 'hash1', 0),
+    ('user2', 'hash2', 0),
+    ('user3', 'hash3', 0),
+    ('user4', 'hash4', 0);
+
+    -- Insert predefined data for app_role
+    insert into app_role (`name`) values
+    ('ROLE_STUDENT'),
+    ('ROLE_PROFESSOR');
+
+    -- Insert predefined data for app_user_role
+    insert into app_user_role (app_user_id, app_role_id) values
+    (1, 1),
+    (2, 1),
+    (3, 2),
+    (4, 2);
+
+    -- Insert predefined data for student
+    insert into student (first_name, last_name, email, phone, major, `year`, credits) values
+    ('John', 'Doe', 'john.doe@gmail.com', '952-555-1234', 'Computer Science', 'Sophomore', 45),
+    ('Jane', 'Smith', 'jane.smith@gmail.com', '846-555-5678', 'Mathematics', 'Junior', 75),
+    ('Sam', 'Smith', 'sam.smith@gmail.com', '846-372-5678', 'Biology', 'Junior', 72);
+
+    -- Insert predefined data for professor
+    insert into professor (first_name, last_name, email, phone) values
+    ('David', 'Davis', 'david.davis@gmail.com', '952-555-8765'),
+    ('Rebecca', 'Brown', 'rebecca.brown@gmail.com', '942-555-4321');
+
+    -- Insert predefined data for course
+    insert into course (`name`, `subject`, credits) values
+    ('Intro to Programming', 'CS', 3),
+    ('Calculus I', 'MATH', 4);
+
+    -- Insert predefined data for section
+    insert into section (abbreviation, student_cap, course_id, professor_id) values
+    ('A', 30, 1, 1), -- Section A of Intro to Programming taught by Prof. Davis
+    ('B', 30, 2, 2); -- Section B of Calculus I taught by Prof. Brown
+
+    -- Insert predefined data for lecture
+    insert into lecture (`day`, start_time, end_time, section_id) values
+    ('Monday', '09:00:00', '10:30:00', 1),
+    ('Wednesday', '09:00:00', '10:30:00', 1),
+    ('Tuesday', '11:00:00', '12:30:00', 2),
+    ('Thursday', '11:00:00', '12:30:00', 2);
+
+    -- Insert predefined data for enrollment
+    insert into enrollment (`status`, student_id, section_id) values
+    ('Enrolled', 1, 1), -- John Doe enrolled in Intro to Programming, Section A
+    ('Enrolled', 2, 2); -- Jane Smith enrolled in Calculus I, Section B
+
+end //
+-- 4. Change the statement terminator back to the original.
+delimiter ;
+
+
 -- Insert data into tables
 insert into app_user (username, password_hash, disabled) values
 ('user1', 'hash1', 0),

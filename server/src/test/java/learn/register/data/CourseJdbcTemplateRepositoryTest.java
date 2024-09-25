@@ -1,7 +1,6 @@
 package learn.register.data;
 
 import learn.register.models.Course;
-import learn.register.models.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-
     void findAll() {
         List<Course> courses = repository.findAll();
         assertNotNull(courses);
@@ -36,7 +34,6 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-
     void findById() {
         Course course = repository.findById(1L);
         assertNotNull(course);
@@ -62,14 +59,11 @@ class CourseJdbcTemplateRepositoryTest {
     }
 
     @Test
-
     void deleteById() {
-        int result = repository.deleteById(1L); // Assuming there is a student with ID 1
+        int result = repository.deleteById(1L); // Assuming there is a course with ID 1
         assertEquals(1, result);
 
         Course deletedCourse = repository.findById(1L);
         assertNull(deletedCourse);
     }
-
-
 }

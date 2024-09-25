@@ -1,2 +1,20 @@
-curl -u user:70e6e657-9a20-4b5b-a9f2-534c2fa17923 -X GET http://localhost:8080/api/courses
+POST /api/user/register HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
 
+{
+  "username": "student_user",
+  "password": "password123!",
+  "code": ""  
+}
+
+###
+POST /api/user/register HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "username": "professor_user",
+  "password": "securePass123!",
+  "code": "PROFESSOR1234"  
+}
