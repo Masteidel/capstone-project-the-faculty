@@ -1,0 +1,26 @@
+/* Navbar.css */
+
+.navbar {
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    padding: 15px;
+    border-radius: 15px; /* Rounded corners */
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: 20px; /* Space added at the top */
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #333; /* Dark gray text color */
+    font-size: 18px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    border-radius: 10px; /* Slight rounding for hover effect */
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Light background highlight on hover */
+    color: #000; /* Darker text on hover */
+  }
+  
