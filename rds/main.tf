@@ -19,7 +19,7 @@ resource "aws_db_instance" "learn-mysql" {
 }
 
 output "rds_endpoint" {
-  value = "aws_db_instance.learn_mysql.endpoint"
+  value = aws_db_instance.learn-mysql.endpoint
 }
 
 variable "db_username" {
