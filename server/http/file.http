@@ -1,9 +1,20 @@
-
-@url = http://localhost:8080/api/user
-POST {{url}}/authenticate HTTP/1.1
+POST /api/user/register HTTP/1.1
+Host: localhost:8080
 Content-Type: application/json
 
 {
-    "username": "user1",
-    "password": "hash1"
+  "username": "student_user",
+  "password": "password123!",
+  "code": ""  
+}
+
+###
+POST /api/user/register HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "username": "professor_user",
+  "password": "securePass123!",
+  "code": "PROFESSOR1234"  
 }

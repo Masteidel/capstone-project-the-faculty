@@ -33,39 +33,25 @@ public class AppUserService implements UserDetailsService {
         return appUser;
     }
 
-    public AppUser create(String username, String password) {
-        validate(username);
-        validatePassword(password);
-
-        password = encoder.encode(password);
-
-        AppUser appUser = new AppUser(0, username, password, false, List.of("User"));
-
-        return repository.create(appUser);
-    }
-
-    private void validate(String username) {
-        if (username == null || username.isBlank()) {
-            throw new ValidationException("username is required");
-        }
-
-        if (username.length() > 50) {
-            throw new ValidationException("username must be less than 50 characters");
-        }
-    }
 
     public AppUser create(String username, String password, String role) {
-        // Validate username and password
         validateUsername(username);
         validatePassword(password);
 
-        // Hash the password using PasswordEncoder
+        System.out.println(role);
+        if (repository.findByUsername(username) != null) {
+            throw new ValidationException("User already exists");
+        }
+
         String encodedPassword = encoder.encode(password);
 
-        // Create a new AppUser instance with 'disabled' set to false
-        AppUser newUser = new AppUser(0, username, encodedPassword, false, List.of(role));
+        // Prefix role with "ROLE_"
+        String prefixedRole = "ROLE_" + role.toUpperCase();
 
-        // Persist the user in the repository
+        // Creating a user with the provided role (e.g., ROLE_PROFESSOR, ROLE_STUDENT)
+        AppUser newUser = new AppUser(0, username, encodedPassword, true, List.of(prefixedRole));
+
+        // Saving the user to the repository
         return repository.create(newUser);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -24,38 +25,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF as we're using JWT, which is immune to CSRF
                 .csrf().disable()
-
-                // Enable CORS
-                .cors()
-
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Use stateless sessions (JWT-based)
                 .and()
                 .authorizeRequests()
 
-                // Allow anyone to access the authentication and registration endpoints
-                .antMatchers("/api/user/authenticate").permitAll()
-                .antMatchers("/api/user/register").permitAll()
+                // Allow public access to registration and authentication endpoints
+                .antMatchers("/api/user/register", "/api/user/authenticate").permitAll()
 
-                // Example of role-based access control
-                .antMatchers(HttpMethod.POST, "/api/admin/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/admin/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/admin/**").hasRole("ADMIN")
+                // Allow both students and professors to perform GET requests
+                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("STUDENT", "PROFESSOR")
 
-                // Allow authenticated users to access user endpoints
-                .antMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                // Only professors can POST, PUT, and DELETE resources
+                .antMatchers(HttpMethod.POST, "/api/**").hasRole("PROFESSOR")
+                .antMatchers(HttpMethod.PUT, "/api/**").hasRole("PROFESSOR")
+                .antMatchers(HttpMethod.DELETE, "/api/**").hasRole("PROFESSOR")
 
-                // All other requests must be authenticated
+                // Require authentication for all other requests
                 .anyRequest().authenticated()
 
+                // Add JWT authentication filter
                 .and()
+                .addFilterBefore(new JwtAuthenticationFilter(converter), UsernamePasswordAuthenticationFilter.class);  // Custom filter for JWT authentication // Or formLogin() if you use form-based authentication
 
-                // Add JWT filter for requests
-                .addFilter(new JwtRequestFilter(authenticationManager(), converter))
-
-                // No session creation since we're stateless (JWT)
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean

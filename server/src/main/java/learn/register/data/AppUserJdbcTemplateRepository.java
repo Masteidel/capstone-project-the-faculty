@@ -77,29 +77,44 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
         updateRoles(user);
     }
 
-    private void updateRoles(AppUser user) {
-        // delete all roles, then re-add
+    @Override
+    public void updateRoles(AppUser user) {
+
+        // Delete all roles for the user
         jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", user.getAppUserId());
 
         Collection<GrantedAuthority> authorities = user.getAuthorities();
 
-        if (authorities == null) {
+        if (authorities == null || authorities.isEmpty()) {
             return;
         }
 
-        for (String role : AppUser.convertAuthoritiesToRoles(authorities)) {
+        // Convert authorities back to roles with the "ROLE_" prefix
+        List<String> roles = AppUser.convertAuthoritiesToRoles(authorities);
+
+        // Log roles before updating the database
+        System.out.println("Roles to be inserted: " + roles);
+
+        // Re-add roles by looking up role IDs in the app_role table
+        for (String role : roles) {
             String sql = "insert into app_user_role (app_user_id, app_role_id) "
-                    + "select ?, app_role_id from app_role where `name` = ?;";
+                    + "select ?, app_role_id from app_role where name = ?;";
+
+            // Now we are using the full role name including the "ROLE_" prefix
             jdbcTemplate.update(sql, user.getAppUserId(), role);
         }
     }
 
-    private List<String> getRolesByUsername(String username) {
+
+    @Override
+    public List<String> getRolesByUsername(String username) {
         final String sql = "select r.name "
                 + "from app_user_role ur "
                 + "inner join app_role r on ur.app_role_id = r.app_role_id "
                 + "inner join app_user au on ur.app_user_id = au.app_user_id "
                 + "where au.username = ?";
+
+        // Query the roles and return a list of role names
         return jdbcTemplate.query(sql, (rs, rowId) -> rs.getString("name"), username);
     }
 }

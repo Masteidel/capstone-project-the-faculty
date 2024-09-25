@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class AppUser extends User {
 
-    private static final String AUTHORITY_PREFIX = "USER";
+    private static final String AUTHORITY_PREFIX = "ROLE_";
 
     private int appUserId;
     private boolean disabled;
@@ -46,12 +46,17 @@ public class AppUser extends User {
     public static List<GrantedAuthority> convertRolesToAuthorities(List<String> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
         for (String role : roles) {
-            Assert.isTrue(!role.startsWith(AUTHORITY_PREFIX),
-                    () ->
-                            String.
-                                    format("%s cannot start with %s (it is automatically added)",
-                                            role, AUTHORITY_PREFIX));
-            authorities.add(new SimpleGrantedAuthority(AUTHORITY_PREFIX + role));
+            // Check if the role already starts with "ROLE_"
+            if (!role.startsWith(AUTHORITY_PREFIX)) {
+                // Add "ROLE_" if it's missing
+                role = AUTHORITY_PREFIX + role;
+            }
+
+            // Add the converted role to authorities
+            authorities.add(new SimpleGrantedAuthority(role));
+
+            // Log the authority for debugging
+
         }
         return authorities;
     }
