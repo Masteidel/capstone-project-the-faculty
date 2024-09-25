@@ -9,10 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -31,20 +29,22 @@ class CourseServiceTest {
         course.setSubject("Math");
         course.setCredits(3);
 
-        // Mock what the repository will save, after the service generates the UUID.
+        Course mockOut = new Course();
+        mockOut.setCourseId(1L);
+        mockOut.setName("Test Course");
+        mockOut.setSubject("Math");
+        mockOut.setCredits(3);
+
         when(courseRepository.save(course)).thenReturn(1);
 
         Result<Course> actual = service.addCourse(course);
         assertEquals(ResultType.SUCCESS, actual.getType());
-
-        // Now check that the actual payload has a non-null courseId.
-        assertNotNull(actual.getPayload().getCourseId());
     }
 
     @Test
     void shouldNotAddInvalidCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
+        course.setCourseId(1L);
         course.setName(null); // Invalid course with missing name
 
         Result<Course> actual = service.addCourse(course);
@@ -60,7 +60,7 @@ class CourseServiceTest {
     @Test
     void shouldUpdateCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
+        course.setCourseId(1L);
         course.setName("Updated Course");
         course.setSubject("Science");
         course.setCredits(4);
@@ -74,7 +74,7 @@ class CourseServiceTest {
     @Test
     void shouldNotUpdateMissingCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
+        course.setCourseId(1L);
         course.setName("Missing Course");
         course.setSubject("Science");
         course.setCredits(4);
@@ -88,7 +88,7 @@ class CourseServiceTest {
     @Test
     void shouldNotUpdateInvalidCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
+        course.setCourseId(1L);
         course.setName(null); // Invalid course with missing name
 
         Result<Course> actual = service.updateCourse(course.getCourseId(), course);
@@ -103,7 +103,7 @@ class CourseServiceTest {
 
     @Test
     void shouldDeleteCourse() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
 
         when(courseRepository.deleteById(courseId)).thenReturn(1);
 
@@ -113,7 +113,7 @@ class CourseServiceTest {
 
     @Test
     void shouldNotDeleteMissingCourse() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
 
         when(courseRepository.deleteById(courseId)).thenReturn(0);
 
