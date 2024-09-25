@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors() // Enable CORS
+                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Use stateless sessions (JWT-based)
                 .and()
@@ -35,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Allow both students and professors to perform GET requests
                 .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("STUDENT", "PROFESSOR")
-
+                .antMatchers(HttpMethod.POST, "/api/enrollments").hasAnyRole("STUDENT")
+                .antMatchers(HttpMethod.POST, "/api/students").hasAnyRole("STUDENT")
                 // Only professors can POST, PUT, and DELETE resources
                 .antMatchers(HttpMethod.POST, "/api/**").hasRole("PROFESSOR")
                 .antMatchers(HttpMethod.PUT, "/api/**").hasRole("PROFESSOR")
