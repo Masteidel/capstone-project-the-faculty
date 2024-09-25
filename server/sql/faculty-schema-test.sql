@@ -74,6 +74,7 @@ create table lecture (
     `day` varchar(9) not null,
     start_time time not null,
     end_time time not null,
+    duration int not null,
     section_id BIGINT not null,
     constraint fk_section_id
         foreign key (section_id)
@@ -208,11 +209,11 @@ insert into section (abbreviation, student_cap, course_id, professor_id) values
 ('A', 30, 1, 1), -- Section A of Intro to Programming taught by Prof. Davis
 ('B', 30, 2, 2); -- Section B of Calculus I taught by Prof. Brown
 
-insert into lecture (`day`, start_time, end_time, section_id) values
-('Monday', '09:00:00', '10:30:00', 1),
-('Wednesday', '09:00:00', '10:30:00', 1),
-('Tuesday', '11:00:00', '12:30:00', 2),
-('Thursday', '11:00:00', '12:30:00', 2);
+insert into lecture (`day`, start_time, end_time, duration, section_id) values
+('Monday', '09:00:00', '10:30:00', 2, 1),
+('Wednesday', '09:00:00', '10:30:00', 3, 1),
+('Tuesday', '11:00:00', '12:30:00', 1, 2),
+('Thursday', '11:00:00', '12:30:00', 2, 2);
 
 insert into enrollment (`status`, student_id, section_id) values
 ('Enrolled', 1, 1), -- John Doe enrolled in Intro to Programming, Section A

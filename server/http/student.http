@@ -1,9 +1,9 @@
 ### Define password variable
-# PASSWORD = e837b6da-c98c-4e08-a408-bc9ce27a9901
+# # PASSWORD = fca55264-4e1f-44ca-af50-a39db8ebf3da
 @url = http://localhost:8080/api/students
 
 ### GET all Students
-#curl -u user:${PASSWORD} -X GET http://localhost:8080/api/students
+curl -u user:fca55264-4e1f-44ca-af50-a39db8ebf3da -X GET http://localhost:8080/api/students
 GET {{url}} HTTP/1.1
 
 ### GET student with specific ID

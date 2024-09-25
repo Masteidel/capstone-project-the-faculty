@@ -4,20 +4,32 @@ import java.time.LocalTime;
 
 public class Lecture {
 
-    private int lectureId;
+    private Long lectureId;
     private String day;
     private LocalTime startTime;
     private LocalTime endTime;
     private int duration;
-    private int sectionId;
+    private Long sectionId;
+
+    public Lecture() {
+    }
+
+    public Lecture(Long lectureId, String day, LocalTime startTime, LocalTime endTime, int duration, Long sectionId) {
+        this.lectureId = lectureId;
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
+        this.sectionId = sectionId;
+    }
 
     // Getters and Setters
 
-    public int getLectureId() {
+    public Long getLectureId() {
         return lectureId;
     }
 
-    public void setLectureId(int lectureId) {
+    public void setLectureId(Long lectureId) {
         this.lectureId = lectureId;
     }
 
@@ -53,11 +65,11 @@ public class Lecture {
         this.duration = duration;
     }
 
-    public int getSectionId() {
+    public Long getSectionId() {
         return sectionId;
     }
 
-    public void setSectionId(int sectionId) {
+    public void setSectionId(Long sectionId) {
         this.sectionId = sectionId;
     }
 }

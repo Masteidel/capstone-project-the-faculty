@@ -1,7 +1,9 @@
 package learn.register.data;
 
+import learn.register.data.mappers.EnrollmentMapper;
 import learn.register.data.mappers.LectureMapper;
 import learn.register.models.Lecture;
+import org.apache.tomcat.jni.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -21,62 +23,56 @@ public class LectureJdbcTemplateRepository implements LectureRepository {
     }
 
     @Override
-    public List<Lecture> findBySectionId(int sectionId) {
-        final String sql = "select lecture_id, day, start_time, end_time, duration, section_id "
-                + "from lecture "
-                + "where section_id = ?;";
-
-        return jdbcTemplate.query(sql, new LectureMapper(), sectionId);
+    public List<Lecture> findAll() {
+        final String sql = "SELECT * FROM lecture";
+        return jdbcTemplate.query(sql, new LectureMapper());
     }
 
     @Override
-    public Lecture add(Lecture lecture) {
-        final String sql = "insert into lecture (day, start_time, end_time, duration, section_id) "
-                + "values (?, ?, ?, ?, ?);";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int rowsAffected = jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, lecture.getDay());
-            ps.setTime(2, java.sql.Time.valueOf(lecture.getStartTime())); // Convert LocalTime to java.sql.Time
-            ps.setTime(3, java.sql.Time.valueOf(lecture.getEndTime()));
-            ps.setInt(4, lecture.getDuration());
-            ps.setInt(5, lecture.getSectionId());
-            return ps;
-        }, keyHolder);
-
-        if (rowsAffected <= 0) {
-            return null;
-        }
-
-        lecture.setLectureId(keyHolder.getKey().intValue());
-        return lecture;
+    public Lecture findById(Long lectureId) {
+        final String sql = "SELECT * FROM lecture WHERE lecture_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{lectureId}, new LectureMapper());
     }
 
     @Override
-    public boolean update(Lecture lecture) {
-        final String sql = "update lecture set "
-                + "day = ?, "
-                + "start_time = ?, "
-                + "end_time = ?, "
-                + "duration = ?, "
-                + "section_id = ? "
-                + "where lecture_id = ?;";
+    public Lecture findBySectionId(Long sectionId) {
+        final String sql = "SELECT lecture_id, day, start_time, end_time, duration, section_id "
+                + "FROM lecture WHERE section_id = ?;";
+
+        return jdbcTemplate.queryForObject(sql, new LectureMapper(), sectionId);
+    }
+
+
+    @Override
+    public int add(Lecture lecture) {
+        final String sql = "INSERT INTO lecture (day, start_time, end_time, duration, section_id) "
+                + "VALUES (?, ?, ?, ?, ?);";
 
         return jdbcTemplate.update(sql,
                 lecture.getDay(),
-                lecture.getStartTime(),
-                lecture.getEndTime(),
+                java.sql.Time.valueOf(lecture.getStartTime()),  // Convert LocalTime to java.sql.Time
+                java.sql.Time.valueOf(lecture.getEndTime()),
                 lecture.getDuration(),
-                lecture.getSectionId(),
-                lecture.getLectureId()) > 0;
+                lecture.getSectionId());
     }
 
     @Override
-    @Transactional
-    public boolean deleteById(int lectureId) {
-        return jdbcTemplate.update(
-                "delete from lecture where lecture_id = ?;",
-                lectureId) > 0;
+    public int update(Lecture lecture) {
+        final String sql = "UPDATE lecture SET day = ?, start_time = ?, end_time = ?, duration = ?, section_id = ? "
+                + "WHERE lecture_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                lecture.getDay(),
+                java.sql.Time.valueOf(lecture.getStartTime()),  // Convert LocalTime to java.sql.Time
+                java.sql.Time.valueOf(lecture.getEndTime()),
+                lecture.getDuration(),
+                lecture.getSectionId(),
+                lecture.getLectureId());
+    }
+
+    @Override
+    public int deleteById(Long lectureId) {
+        final String sql = "DELETE FROM lecture WHERE lecture_id = ?";
+        return jdbcTemplate.update(sql, lectureId);
     }
 }

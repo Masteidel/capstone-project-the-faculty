@@ -2,6 +2,7 @@ package learn.register.domain;
 
 import learn.register.data.LectureJdbcTemplateRepository;
 import learn.register.models.Lecture;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,35 +12,40 @@ public class LectureService {
 
     private final LectureJdbcTemplateRepository lectureRepository;
 
+    @Autowired
     public LectureService(LectureJdbcTemplateRepository lectureRepository) {
         this.lectureRepository = lectureRepository;
     }
 
-    // Fetch all lectures by section ID
-    public List<Lecture> findAllLectures(int sectionId) {
-        return lectureRepository.findBySectionId(sectionId);
+    // Fetch all lectures
+    public List<Lecture> findAll() {
+        return lectureRepository.findAll();
     }
 
     // Fetch a lecture by ID
-    public Lecture findLectureById(int lectureId) {
-        return lectureRepository.findBySectionId(lectureId).stream()
-                .filter(lecture -> lecture.getLectureId() == lectureId)
-                .findFirst()
-                .orElse(null);
+    public Lecture findLectureById(Long lectureId) {
+        return lectureRepository.findById(lectureId);
     }
 
+
+    // Fetch a single lecture by Section ID
+    public Lecture findLectureBySectionId(Long sectionId) {
+        return lectureRepository.findBySectionId(sectionId);  // This now returns a single Lecture
+    }
+
+
     // Add a new lecture
-    public Result<Lecture> add(Lecture lecture) {
+    public Result<Lecture> addLecture(Lecture lecture) {
         Result<Lecture> result = validate(lecture);
         if (!result.isSuccess()) {
             return result;
         }
 
-        Lecture addedLecture = lectureRepository.add(lecture);
+        int addResult = lectureRepository.add(lecture);
 
-        if (addedLecture != null) {
+        if (addResult > 0) {
             result.setType(ResultType.SUCCESS);
-            result.setPayload(addedLecture);
+            result.setPayload(lecture);
         } else {
             result.setType(ResultType.ERROR);
             result.setMessage("Could not save the lecture.");
@@ -49,17 +55,18 @@ public class LectureService {
     }
 
     // Update an existing lecture
-    public Result<Lecture> update(int lectureId, Lecture lecture) {
+    public Result<Lecture> updateLecture(Long lectureId, Lecture lecture) {
         Result<Lecture> result = validate(lecture);
         if (!result.isSuccess()) {
             return result;
         }
 
-        lecture.setLectureId(lectureId); // Ensure the correct ID is set
-        boolean updateResult = lectureRepository.update(lecture);
+        lecture.setLectureId(lectureId); // Set the correct ID
+        int updateResult = lectureRepository.update(lecture);
 
-        if (updateResult) {
+        if (updateResult > 0) {
             result.setType(ResultType.SUCCESS);
+            result.setPayload(lecture); // Set the updated lecture as the payload
         } else {
             result.setType(ResultType.NOT_FOUND);
             result.setMessage("Lecture not found.");
@@ -69,11 +76,11 @@ public class LectureService {
     }
 
     // Delete a lecture by ID
-    public Result<Void> delete(int lectureId) {
+    public Result<Void> deleteLectureById(Long lectureId) {
         Result<Void> result = new Result<>();
-        boolean deleteResult = lectureRepository.deleteById(lectureId);
+        int deleteResult = lectureRepository.deleteById(lectureId);
 
-        if (deleteResult) {
+        if (deleteResult > 0) {
             result.setType(ResultType.SUCCESS);
         } else {
             result.setType(ResultType.NOT_FOUND);
@@ -86,7 +93,7 @@ public class LectureService {
     private Result<Lecture> validate(Lecture lecture) {
         Result<Lecture> result = new Result<>();
 
-        if (lecture.getDay() == null || lecture.getDay().trim().isEmpty()) {
+        if (lecture.getDay() == null || lecture.getDay().isEmpty()) {
             result.setType(ResultType.INVALID);
             result.setMessage("Day is required.");
             return result;
@@ -101,6 +108,18 @@ public class LectureService {
         if (lecture.getEndTime() == null) {
             result.setType(ResultType.INVALID);
             result.setMessage("End time is required.");
+            return result;
+        }
+
+        if (lecture.getDuration() <= 0) {
+            result.setType(ResultType.INVALID);
+            result.setMessage("Duration must be greater than 0.");
+            return result;
+        }
+
+        if (lecture.getSectionId() == null) {
+            result.setType(ResultType.INVALID);
+            result.setMessage("Section ID is required.");
             return result;
         }
 
