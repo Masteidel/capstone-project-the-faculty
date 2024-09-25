@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 function CourseSections() {
     const { courseId } = useParams();
     const [sections, setSections] = useState([]);
-    const url = `http://localhost:8080/api/course/${courseId}/sections`;
+    const url = `http://localhost:8080/api/courses/${courseId}/sections`;
 
     // Fetch sections for the course from the API
     useEffect(() => {
