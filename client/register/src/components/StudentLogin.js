@@ -39,9 +39,10 @@ function StudentLogin() {
                 localStorage.setItem("jwt_token", data.jwt_token);
                 console.log("Registration successful, JWT token stored!");
 
-                navigate("/courses");
+                //navigate("/courses");
+                navigate("/student-form");
             }
-            
+
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error registering:", error);

@@ -109,7 +109,6 @@ function CourseList() {
 
     return (
         <div>
-            <h1>Available Courses</h1>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             {/* Conditionally render Add Course form for professors */}
