@@ -7,17 +7,28 @@ resource "aws_db_instance" "learn-mysql" {
   allocated_storage = 20
   storage_type = "gp2"
   engine = "mysql"
-  engine_version = "9.0.1"
+  engine_version = "8.0"
   instance_class = "db.t3.micro"
   db_name = "faculty_prod"
-  username = "root"
-  password = ""
-  parameter_group_name = "default.mysql9.0.1"
+  username = var.db_username
+  password = var.db_password
+  parameter_group_name = "default.mysql8.0"
 
   skip_final_snapshot = true
   publicly_accessible = true
 }
 
 output "rds_endpoint" {
-  value = "aws_db_instance.my_database.endpoint"
+  value = "aws_db_instance.learn_mysql.endpoint"
+}
+
+variable "db_username" {
+  description = "The database master username"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The database master password"
+  type        = string
+  sensitive   = true
 }
