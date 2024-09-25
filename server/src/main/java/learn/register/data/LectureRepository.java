@@ -5,11 +5,15 @@ import learn.register.models.Lecture;
 import java.util.List;
 
 public interface LectureRepository {
-    List<Lecture> findBySectionId(int sectionId);
+    List<Lecture> findAll();
 
-    Lecture add(Lecture lecture);
+    Lecture findById(Long lectureId);
 
-    boolean update(Lecture lecture);
+    Lecture findBySectionId(Long sectionId);
 
-    boolean deleteById(int lectureId);
+    int add(Lecture lecture);
+
+    int update(Lecture lecture);
+
+    int deleteById(Long lectureId);
 }

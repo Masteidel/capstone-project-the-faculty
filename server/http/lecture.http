@@ -1,0 +1,11 @@
+### Define password variable
+# # PASSWORD = 8885975b-d16b-4a04-82b7-b91332dd21c4
+@url = http://localhost:8080/api/lectures
+
+### GET all Lectures
+curl -u user:8885975b-d16b-4a04-82b7-b91332dd21c4 -X GET http://localhost:8080/api/lectures
+GET {{url}} HTTP/1.1
+
+### GET Lecture with specific ID
+#curl -u user:${PASSWORD} -X GET http://localhost:8080/api/lectures/2
+GET {{url}}/2 HTTP/1.1

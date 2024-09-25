@@ -27,7 +27,7 @@ class StudentServiceTest {
         student.setEmail("john.doe@example.com");
         student.setPhone("123-456-7890");
         student.setMajor("Computer Science");
-        student.setYear(2023);
+        student.setYear("Sophomore");
         student.setCredits(30);
 
         when(studentRepository.save(student)).thenReturn(1);
@@ -46,7 +46,7 @@ class StudentServiceTest {
         assertEquals(ResultType.INVALID, actual.getType());
 
         student.setFirstName("John");
-        student.setYear(0); // Invalid student with year <= 0
+        student.setYear(""); // Invalid student with year <= 0
         actual = service.saveStudent(student);
         assertEquals(ResultType.INVALID, actual.getType());
     }
@@ -59,7 +59,7 @@ class StudentServiceTest {
         student.setEmail("john.doe@example.com");
         student.setPhone("123-456-7890");
         student.setMajor("Computer Science");
-        student.setYear(2023);
+        student.setYear("Junior");
         student.setCredits(30);
 
         when(studentRepository.update(student)).thenReturn(1);
@@ -76,7 +76,7 @@ class StudentServiceTest {
         student.setEmail("john.doe@example.com");
         student.setPhone("123-456-7890");
         student.setMajor("Computer Science");
-        student.setYear(2023);
+        student.setYear("Junior");
         student.setCredits(30);
 
         when(studentRepository.update(student)).thenReturn(0);

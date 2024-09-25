@@ -44,7 +44,6 @@ class CourseServiceTest {
     @Test
     void shouldNotAddInvalidCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
         course.setName(null); // Invalid course with missing name
 
         Result<Course> actual = service.addCourse(course);
@@ -60,7 +59,6 @@ class CourseServiceTest {
     @Test
     void shouldUpdateCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
         course.setName("Updated Course");
         course.setSubject("Science");
         course.setCredits(4);
@@ -74,7 +72,6 @@ class CourseServiceTest {
     @Test
     void shouldNotUpdateMissingCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
         course.setName("Missing Course");
         course.setSubject("Science");
         course.setCredits(4);
@@ -88,7 +85,6 @@ class CourseServiceTest {
     @Test
     void shouldNotUpdateInvalidCourse() {
         Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
         course.setName(null); // Invalid course with missing name
 
         Result<Course> actual = service.updateCourse(course.getCourseId(), course);
@@ -103,7 +99,7 @@ class CourseServiceTest {
 
     @Test
     void shouldDeleteCourse() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
 
         when(courseRepository.deleteById(courseId)).thenReturn(1);
 
@@ -113,7 +109,7 @@ class CourseServiceTest {
 
     @Test
     void shouldNotDeleteMissingCourse() {
-        UUID courseId = UUID.randomUUID();
+        Long courseId = 1L;
 
         when(courseRepository.deleteById(courseId)).thenReturn(0);
 
