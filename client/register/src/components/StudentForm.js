@@ -21,7 +21,7 @@ function StudentForm() {
     useEffect(() => {
         const fetchStudents = async () => {
             const token = localStorage.getItem("jwt_token");
-
+    
             try {
                 const response = await fetch("http://localhost:8080/api/students", {
                     method: "GET",
@@ -30,7 +30,7 @@ function StudentForm() {
                         "Content-Type": "application/json",
                     },
                 });
-
+    
                 const data = await response.json();
                 if (response.ok) {
                     setStudents(data); // Store the list of students
@@ -39,14 +39,27 @@ function StudentForm() {
                         ...prevData,
                         studentId: nextStudentId,
                     }));
+                    
+                    // Save the generated studentId to localStorage
+                    localStorage.setItem("studentId", nextStudentId);
+    
                     console.log("Next studentId generated:", nextStudentId); // Log the generated studentId
                 }
             } catch (error) {
                 console.error("Error fetching students:", error);
             }
         };
-
-        fetchStudents();
+    
+        // Fetch the studentId from localStorage if it exists
+        const storedStudentId = localStorage.getItem("studentId");
+        if (storedStudentId) {
+            setStudentData((prevData) => ({
+                ...prevData,
+                studentId: storedStudentId,
+            }));
+        } else {
+            fetchStudents();
+        }
     }, []);
 
     // Function to calculate the next available studentId
@@ -67,7 +80,7 @@ function StudentForm() {
         e.preventDefault();
 
         const token = localStorage.getItem("jwt_token");
-
+    
         try {
             const response = await fetch("http://localhost:8080/api/students", {
                 method: "POST",
@@ -77,17 +90,20 @@ function StudentForm() {
                 },
                 body: JSON.stringify(studentData), // Include the auto-generated studentId
             });
-
+    
             if (!response.ok) {
                 throw new Error("Failed to create student profile");
             }
-
+    
             const newStudent = await response.json();
             console.log("New student created:", newStudent);
-
+    
+            // Store the studentId in local storage
+            localStorage.setItem("studentId", newStudent.studentId);
+    
             alert("Student profile created successfully!");
             setIsProfileComplete(true); // Mark profile as complete
-
+    
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error creating student profile:", error);

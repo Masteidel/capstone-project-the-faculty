@@ -73,7 +73,7 @@ function ProfessorLogin() {
             if (data.jwt_token) {
                 localStorage.setItem("jwt_token", data.jwt_token);
                 console.log("Registration successful, JWT token stored!");
-                navigate("/courses");
+                navigate("/professor-form");
             }
         } catch (error) {
             setErrorMessage(error.message);
