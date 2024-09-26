@@ -1,0 +1,85 @@
+/* Enrollment Table Styling */
+.enrollment-table-container {
+    max-width: 1000px; /* Limit the overall width of the table */
+    margin: 0 auto; /* Center the table on the page */
+    padding: 20px;
+    overflow-x: auto; /* Ensure the table is scrollable horizontally on smaller screens */
+}
+
+.enrollment-table {
+    width: 100%;
+    font-size: 18px;
+    text-align: left;
+    background-color: white; /* White background for the table */
+    border-spacing: 0;
+    border-radius: 10px; /* Add rounded corners to the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for table */
+    color: black; /* Black text for better readability */
+}
+
+/* Table header */
+.enrollment-table thead {
+    background-color: #f9f9f9; /* Light background for header */
+}
+
+.enrollment-table th {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    color: black; /* Black text for headers */
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Table rows */
+.enrollment-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd; /* Light gray borders */
+    color: black; /* Black text for better readability */
+    text-align: left;
+    word-wrap: break-word; /* Allow text to wrap within the cells */
+    white-space: normal; /* Allow normal text wrapping */
+}
+
+/* Even row background color */
+.enrollment-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray background for even rows */
+}
+
+/* Odd row background color */
+.enrollment-table tr:nth-child(odd) {
+    background-color: #ffffff; /* White background for odd rows */
+}
+
+/* Hover effect */
+.enrollment-table tr:hover {
+    background-color: #f1f1f1; /* Light hover effect */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Button Styling inside Table */
+.enrollment-table button {
+    background-color: #007bff; /* Blue background for action buttons */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.enrollment-table button:disabled {
+    background-color: #ccc; /* Gray background for disabled buttons */
+    cursor: not-allowed;
+}
+
+.enrollment-table button:hover:not(:disabled) {
+    background-color: #0056b3; /* Darker blue on hover for non-disabled buttons */
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin: 10px 0;
+}

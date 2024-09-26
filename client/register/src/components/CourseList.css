@@ -1,38 +1,133 @@
-/* CourseList.css */
+/* Course List Styling */
+.course-list {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center; /* Centered text */
+}
 
+.course-list h1 {
+    margin-bottom: 20px;
+    color: #333; /* Dark gray for title */
+    font-size: 2.5rem; /* Similar sizing as the other section */
+    font-weight: bold;
+}
+
+/* General table styles with rounded edges */
 .course-table {
     width: 100%;
-    border-collapse: collapse;
     margin: 20px 0;
     font-size: 18px;
     text-align: left;
+    background-color: white; /* White background for the table */
+    border-spacing: 0; /* Use border-spacing instead of border-collapse */
+    border-radius: 10px; /* Add border radius for rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow: hidden; /* Ensures rounded corners stay intact */
+    color: black; /* Black text for better readability */
 }
 
-.course-table th,
-.course-table td {
+/* Table header */
+.course-table thead {
+    background-color: #007bff; /* Blue background for header */
+}
+
+.course-table th {
     padding: 12px 15px;
     border: 1px solid #ddd;
+    color: black; /* Black text for header for better visibility */
 }
 
-.course-table thead {
-    background-color: black; /* Black header background */
-    color: white; /* White text for header */
+/* Table rows */
+.course-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd; /* Light gray borders */
+    color: black; /* Black text for better readability */
 }
 
+/* Even rows */
 .course-table tr:nth-child(even) {
-    background-color: #4d4d4d; /* Slightly lighter gray for even rows */
+    background-color: #f9f9f9; /* Light gray background for even rows */
 }
 
+/* Odd rows */
 .course-table tr:nth-child(odd) {
-    background-color: #333; /* Darker gray for odd rows */
-    color: white; /* White text for odd rows */
+    background-color: #ffffff; /* White background for odd rows */
 }
 
+/* Hover effect */
 .course-table tr:hover {
-    background-color: #555; /* Hover effect for rows */
+    background-color: #f1f1f1; /* Light hover effect */
+    cursor: pointer; /* Pointer cursor on hover */
 }
 
+/* Rounded corners at the top of the table */
+.course-table thead th:first-child {
+    border-top-left-radius: 10px; /* Top-left corner rounded */
+}
+
+.course-table thead th:last-child {
+    border-top-right-radius: 10px; /* Top-right corner rounded */
+}
+
+/* Rounded corners at the bottom of the table */
+.course-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Bottom-left corner rounded */
+}
+
+.course-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Bottom-right corner rounded */
+}
+
+/* Error message styling */
 .error-message {
     color: red;
     margin-top: 10px;
+}
+
+/* Add Course Form Styling */
+.add-course-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 40px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    color: black; /* Black text for form inputs */
+}
+
+.add-course-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: black; /* Black text for form title */
+    text-align: center;
+}
+
+.add-course-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: black; /* Black text inside inputs */
+}
+
+.add-course-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.add-course-form button:hover {
+    background-color: #0056b3;
 }

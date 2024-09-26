@@ -193,7 +193,11 @@ function SectionList() {
     };
 
     return (
-        <div>
+        <div className="section-list">
+            
+                <h1>Sections List</h1>
+                
+            
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             {/* Conditionally render Add Section form for professors */}
@@ -276,7 +280,7 @@ function SectionList() {
                                 {/* Professors can delete sections */}
                                 {userRole && userRole.includes("ROLE_PROFESSOR") && (
                                     <td>
-                                        <button onClick={() => handleDeleteSection(section.sectionId)}>Delete</button>
+                                        <button className="delete" onClick={() => handleDeleteSection(section.sectionId)}>Delete</button>
                                     </td>
                                 )}
                             </tr>
