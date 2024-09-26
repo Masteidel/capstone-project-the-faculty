@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import jwtDecode from 'jwt-decode'; // Fix import
+
 import './StudentLogin.css';
 
 function StudentLogin() {
@@ -9,8 +11,15 @@ function StudentLogin() {
     const [showRegister, setShowRegister] = useState(false); // Toggle between login and register form
     const navigate = useNavigate();
 
+    const clearLocalStorage = () => {
+        localStorage.removeItem("jwt_token");
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
+
+        // Clear any existing token before login
+        clearLocalStorage();
 
         const requestData = {
             username: username,
@@ -31,11 +40,14 @@ function StudentLogin() {
             }
 
             const data = await loginResponse.json();
+
+            // Store the new token, replacing the old one
             localStorage.setItem("jwt_token", data.jwt_token);
             console.log("Login successful, JWT token stored!");
 
-            // Navigate to the student's dashboard or form
+            // Force refresh or redirect
             navigate("/courses");
+            window.location.reload(); // This forces a page refresh to reload state
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error logging in:", error);
@@ -44,6 +56,9 @@ function StudentLogin() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        // Clear any existing token before registration
+        clearLocalStorage();
 
         const requestData = {
             username: username,
@@ -61,15 +76,23 @@ function StudentLogin() {
             });
 
             if (!registerResponse.ok) {
-                throw new Error("Registration failed. Please check your credentials.");
+                const errorData = await registerResponse.json();
+                throw new Error(`Registration failed: ${errorData.message}`);
             }
 
             const registerData = await registerResponse.json();
-            localStorage.setItem("jwt_token", registerData.jwt_token);
-            console.log("Registration successful, JWT token stored!");
+            console.log("Registration response data:", registerData);
 
-            // Navigate to the student's form for profile completion
-            navigate("/student-form");
+            if (registerData.jwt_token) {
+                localStorage.setItem("jwt_token", registerData.jwt_token);
+                console.log("Registration successful, JWT token stored:", registerData.jwt_token);
+
+                // Force refresh or redirect
+                navigate("/student-form");
+                window.location.reload(); // Force page reload to reset the state
+            } else {
+                console.error("JWT token not found in response");
+            }
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error registering:", error);

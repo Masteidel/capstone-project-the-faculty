@@ -21,7 +21,7 @@ function StudentForm() {
     useEffect(() => {
         const fetchStudents = async () => {
             const token = localStorage.getItem("jwt_token");
-
+    
             try {
                 const response = await fetch("http://localhost:8080/api/students", {
                     method: "GET",
@@ -30,7 +30,7 @@ function StudentForm() {
                         "Content-Type": "application/json",
                     },
                 });
-
+    
                 const data = await response.json();
                 if (response.ok) {
                     setStudents(data); // Store the list of students
@@ -39,6 +39,7 @@ function StudentForm() {
                         ...prevData,
                         studentId: nextStudentId,
                     }));
+    
                     console.log("Next studentId generated:", nextStudentId); // Log the generated studentId
                 }
             } catch (error) {
@@ -46,8 +47,9 @@ function StudentForm() {
             }
         };
 
+        // Always fetch students to generate the next studentId
         fetchStudents();
-    }, []);
+    }, []); // No localStorage dependency
 
     // Function to calculate the next available studentId
     const getNextStudentId = (students) => {
@@ -67,7 +69,7 @@ function StudentForm() {
         e.preventDefault();
 
         const token = localStorage.getItem("jwt_token");
-
+    
         try {
             const response = await fetch("http://localhost:8080/api/students", {
                 method: "POST",
@@ -77,17 +79,17 @@ function StudentForm() {
                 },
                 body: JSON.stringify(studentData), // Include the auto-generated studentId
             });
-
+    
             if (!response.ok) {
                 throw new Error("Failed to create student profile");
             }
-
+    
             const newStudent = await response.json();
             console.log("New student created:", newStudent);
-
-            alert("Student profile created successfully!");
+    
+            // No need to store the studentId in local storage, handle the session dynamically
             setIsProfileComplete(true); // Mark profile as complete
-
+    
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error creating student profile:", error);
