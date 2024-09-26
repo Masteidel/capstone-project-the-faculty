@@ -1,21 +1,36 @@
 import { Link } from "react-router-dom";
 import './Navbar.css'; 
 import { useEffect, useState } from 'react'; 
-import {jwtDecode } from 'jwt-decode'; 
+import {jwtDecode} from 'jwt-decode'; 
 
 function Navbar() {
   const [userRole, setUserRole] = useState(null);
 
+  // Function to update user role
+  const updateUserRole = () => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded Token:", decodedToken);
+
+      // Set the user role based on the decoded token
+      setUserRole(decodedToken.authorities);
+    } else {
+      setUserRole(null); // Reset role if no token is found
+    }
+  };
+
   // Use effect to decode the token and extract the user's role
   useEffect(() => {
-    const token = localStorage.getItem("jwt_token"); // Get the token from localStorage (or wherever it's stored)
-    if (token) {
-      const decodedToken = jwtDecode(token); // Decode the token
-      console.log("Decoded Token:", decodedToken); // Log the decoded token to check the structure
+    updateUserRole(); // Call the function to set the role on component mount
 
-      // Set the user role based on the "authorities" field
-      setUserRole(decodedToken.authorities); // Use the authorities field to get the role
-    }
+    // Add an event listener for changes in localStorage
+    window.addEventListener('storage', updateUserRole);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener('storage', updateUserRole);
+    };
   }, []);
 
   return (
