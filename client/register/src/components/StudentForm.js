@@ -39,9 +39,6 @@ function StudentForm() {
                         ...prevData,
                         studentId: nextStudentId,
                     }));
-                    
-                    // Save the generated studentId to localStorage
-                    localStorage.setItem("studentId", nextStudentId);
     
                     console.log("Next studentId generated:", nextStudentId); // Log the generated studentId
                 }
@@ -49,18 +46,10 @@ function StudentForm() {
                 console.error("Error fetching students:", error);
             }
         };
-    
-        // Fetch the studentId from localStorage if it exists
-        const storedStudentId = localStorage.getItem("studentId");
-        if (storedStudentId) {
-            setStudentData((prevData) => ({
-                ...prevData,
-                studentId: storedStudentId,
-            }));
-        } else {
-            fetchStudents();
-        }
-    }, []);
+
+        // Always fetch students to generate the next studentId
+        fetchStudents();
+    }, []); // No localStorage dependency
 
     // Function to calculate the next available studentId
     const getNextStudentId = (students) => {
@@ -98,10 +87,7 @@ function StudentForm() {
             const newStudent = await response.json();
             console.log("New student created:", newStudent);
     
-            // Store the studentId in local storage
-            localStorage.setItem("studentId", newStudent.studentId);
-    
-            alert("Student profile created successfully!");
+            // No need to store the studentId in local storage, handle the session dynamically
             setIsProfileComplete(true); // Mark profile as complete
     
         } catch (error) {

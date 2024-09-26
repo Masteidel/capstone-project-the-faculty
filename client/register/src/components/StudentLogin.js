@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from 'jwt-decode';
+import jwtDecode from 'jwt-decode'; // Fix import
+
 import './StudentLogin.css';
 
 function StudentLogin() {
@@ -10,34 +11,16 @@ function StudentLogin() {
     const [showRegister, setShowRegister] = useState(false); // Toggle between login and register form
     const navigate = useNavigate();
 
-    const validateToken = (token) => {
-        try {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000; // Current time in seconds
-            if (decoded.exp > currentTime) {
-                return true; // Token is valid
-            }
-            return false; // Token has expired
-        } catch (error) {
-            return false; // Invalid token
-        }
+    const clearLocalStorage = () => {
+        localStorage.removeItem("jwt_token");
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        // Check if a valid token exists before proceeding to login
-        const token = localStorage.getItem("jwt_token");
+        // Clear any existing token before login
+        clearLocalStorage();
 
-        if (token && validateToken(token)) {
-            console.log("Using existing valid token");
-            navigate("/courses"); // Redirect to courses if the token is valid
-            return; // Skip the login process
-        } else {
-            console.log("Token invalid or expired, logging in again");
-        }
-
-        // Proceed with login if no valid token
         const requestData = {
             username: username,
             password: password
@@ -57,21 +40,25 @@ function StudentLogin() {
             }
 
             const data = await loginResponse.json();
+
+            // Store the new token, replacing the old one
             localStorage.setItem("jwt_token", data.jwt_token);
             console.log("Login successful, JWT token stored!");
 
-            // Navigate to the student's dashboard or form
+            // Force refresh or redirect
             navigate("/courses");
+            window.location.reload(); // This forces a page refresh to reload state
         } catch (error) {
             setErrorMessage(error.message);
             console.error("Error logging in:", error);
         }
-
     };
 
- 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        // Clear any existing token before registration
+        clearLocalStorage();
 
         const requestData = {
             username: username,
@@ -100,10 +87,9 @@ function StudentLogin() {
                 localStorage.setItem("jwt_token", registerData.jwt_token);
                 console.log("Registration successful, JWT token stored:", registerData.jwt_token);
 
-                // Navigate to the student's form for profile completion
-                setTimeout(() => {
-                    navigate("/student-form");
-                }, 500); // Small delay for testing token storage
+                // Force refresh or redirect
+                navigate("/student-form");
+                window.location.reload(); // Force page reload to reset the state
             } else {
                 console.error("JWT token not found in response");
             }
@@ -112,7 +98,6 @@ function StudentLogin() {
             console.error("Error registering:", error);
         }
     };
-
 
     return (
         <div className="login-container">

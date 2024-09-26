@@ -10,27 +10,40 @@ function Navbar() {
   const updateUserRole = () => {
     const token = localStorage.getItem("jwt_token");
     if (token) {
-      const decodedToken = jwtDecode(token);
-      console.log("Decoded Token:", decodedToken);
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log("Decoded Token:", decodedToken);
 
-      // Set the user role based on the decoded token
-      setUserRole(decodedToken.authorities);
+        // Assuming decodedToken.authorities might be an array or object
+        if (Array.isArray(decodedToken.authorities)) {
+          // Check if it contains the required role
+          if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+            setUserRole('ROLE_STUDENT');
+          } else if (decodedToken.authorities.includes('ROLE_PROFESSOR')) {
+            setUserRole('ROLE_PROFESSOR');
+          }
+        } else {
+          // Fallback to string comparison if it's not an array
+          setUserRole(decodedToken.authorities);
+        }
+      } catch (error) {
+        console.error("Failed to decode token", error);
+        setUserRole(null); // Clear role on error
+      }
     } else {
-      setUserRole(null); // Reset role if no token is found
+      setUserRole(null); // Clear role if no token is found
     }
   };
 
-  // Use effect to decode the token and extract the user's role
+  // Use effect to check the token periodically
   useEffect(() => {
-    updateUserRole(); // Call the function to set the role on component mount
+    // Set an interval to refresh the token every second (1000 ms)
+    const interval = setInterval(() => {
+      updateUserRole(); // Call the function to update the role periodically
+    }, 1000); // Poll every second (adjust as needed)
 
-    // Add an event listener for changes in localStorage
-    window.addEventListener('storage', updateUserRole);
-
-    // Cleanup the event listener when the component is unmounted
-    return () => {
-      window.removeEventListener('storage', updateUserRole);
-    };
+    // Cleanup the interval when the component is unmounted
+    return () => clearInterval(interval);
   }, []);
 
   return (
