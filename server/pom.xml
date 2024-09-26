@@ -22,6 +22,11 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+            <version>4.7.5</version>
+        </dependency>
         <!-- Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
