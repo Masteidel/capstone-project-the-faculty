@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Enrollment from "./Enrollment"; // Import the Enrollment component
+import "./StudentForm.css";
 
 function StudentForm() {
     const [studentData, setStudentData] = useState({
@@ -99,7 +100,7 @@ function StudentForm() {
     }
 
     return (
-        <div>
+        <div className="student-profile-container">
             <h1>Complete Your Student Profile</h1>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form onSubmit={handleSubmit}>

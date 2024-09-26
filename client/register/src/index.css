@@ -1,13 +1,47 @@
+/* General styles */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: black; /* Change text color to black */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.intro-container {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 50px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0;
+  color: black; /* Ensuring text is black */
+}
+
+.hero-subtitle, .hero-description {
+  color: black; /* Change subtitle and description text to black */
+}
+
+.highlight {
+  color: #F7931D; /* Orange highlight */
+}
+
+/* Button styles */
+.nav-btn, .nav-btn-outline {
+  color: black; /* Black text for buttons */
+}
+
+.about-section {
+  color: black; /* Change about section text to black */
 }

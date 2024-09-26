@@ -13,15 +13,15 @@ function StudentLogin() {
 
         const requestData = {
             username: username,
-            password: password,
-            code: ""  // Send an empty code for students
+            password: password
         };
 
         // Log the payload before sending it for debugging
         console.log("Request Data:", requestData);
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/register", {
+            // Step 1: Attempt to login
+            const loginResponse = await fetch("http://localhost:8080/api/user/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -29,29 +29,49 @@ function StudentLogin() {
                 body: JSON.stringify(requestData)
             });
 
-            if (!response.ok) {
+            if (loginResponse.ok) {
+                // If login is successful, get the JWT token
+                const data = await loginResponse.json();
+                localStorage.setItem("jwt_token", data.jwt_token);
+                console.log("Login successful, JWT token stored!");
+
+                // Navigate to the student's dashboard or form
+                navigate("/courses");
+                return;
+            }
+
+            // Step 2: If login fails, proceed with registration
+            const registerResponse = await fetch("http://localhost:8080/api/user/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ...requestData, code: "" })  // Empty code for student registration
+            });
+
+            if (!registerResponse.ok) {
                 throw new Error("Registration failed. Please check your credentials.");
             }
 
-            const data = await response.json();
+            const registerData = await registerResponse.json();
 
-            if (data.jwt_token) {
-                localStorage.setItem("jwt_token", data.jwt_token);
+            if (registerData.jwt_token) {
+                localStorage.setItem("jwt_token", registerData.jwt_token);
                 console.log("Registration successful, JWT token stored!");
 
-                //navigate("/courses");
+                // Navigate to the student's form for profile completion
                 navigate("/student-form");
             }
 
         } catch (error) {
             setErrorMessage(error.message);
-            console.error("Error registering:", error);
+            console.error("Error during login/registration:", error);
         }
     };
 
     return (
         <div className="login-container">
-            <h1>Student Registration</h1>
+            <h1>Student Login / Registration</h1>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form className="login-form" onSubmit={handleSubmit}>
                 {/* Username Input */}
@@ -79,7 +99,7 @@ function StudentLogin() {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="login-btn">Register</button>
+                <button type="submit" className="login-btn">Login / Register</button>
             </form>
         </div>
     );

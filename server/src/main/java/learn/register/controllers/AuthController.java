@@ -40,9 +40,8 @@ public class AuthController {
         this.appUserService = appUserService;
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
-
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
 
@@ -137,5 +136,7 @@ public class AuthController {
             return new ResponseEntity<>(List.of("The provided username already exists"), HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }
 

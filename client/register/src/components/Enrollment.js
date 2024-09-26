@@ -119,7 +119,8 @@ function Enrollment({ studentId }) {
     }
 
     return (
-        <div>
+        <div className="enrollment-table-container">
+            <h1>Enrollment</h1>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             {sections.length > 0 ? (

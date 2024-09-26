@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // Allow public access to registration and authentication endpoints
-                .antMatchers("/api/user/register", "/api/user/authenticate").permitAll()
+                .antMatchers("/api/user/register", "/api/user/authenticate", "/api/user/login").permitAll()
 
                 // Allow both students and professors to perform GET requests
                 .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("STUDENT", "PROFESSOR")

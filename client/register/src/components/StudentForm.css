@@ -1,0 +1,64 @@
+/* Container for the form */
+.student-profile-container {
+    max-width: 600px;
+    margin: 40px auto; /* Center the container on the page */
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center;
+}
+
+/* Form heading */
+.student-profile-container h1 {
+    color: #333; /* Dark gray text */
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Input fields */
+.student-profile-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: black;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+/* Error message */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Submit button */
+.student-profile-container button {
+    background-color: #007bff; /* Blue background for buttons */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Full width button */
+}
+
+.student-profile-container button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .student-profile-container {
+        padding: 15px;
+    }
+
+    .student-profile-container h1 {
+        font-size: 2rem; /* Adjust heading size on smaller screens */
+    }
+}

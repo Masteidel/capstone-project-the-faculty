@@ -9,6 +9,7 @@ import StudentLogin from "./components/StudentLogin"; // Import Student Login co
 import SectionList from "./components/SectionList";
 import Enrollment from "./components/Enrollment";
 import StudentForm from "./components/StudentForm";
+import StudentsEnrolled from "./components/StudentsEnrolled"; // Import the StudentsEnrolled component
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path="sections" element={<SectionList />} />
           <Route path="enrollment" element={<Enrollment />} />
           <Route path="/student-form" element={<StudentForm />} />
-          {/* Add more routes as necessary */}
+          <Route path="/studentsEnrolled" element={<StudentsEnrolled />} />  
+          
         </Route>
       </Routes>
     </Router>

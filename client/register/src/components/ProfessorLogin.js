@@ -22,7 +22,29 @@ function ProfessorLogin() {
         console.log("Request Data:", requestData);
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/register", {
+            // Step 1: Try logging in first using /login endpoint
+            const loginResponse = await fetch("http://localhost:8080/api/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            if (loginResponse.ok) {
+                // Login successful
+                const data = await loginResponse.json();
+                localStorage.setItem("jwt_token", data.jwt_token);
+                console.log("Login successful, JWT token stored!");
+                navigate("/courses"); // Redirect to courses or appropriate page
+                return;
+            }
+
+            // Step 2: If login fails (403), register professor using /register endpoint
+            const registerResponse = await fetch("http://localhost:8080/api/user/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,29 +52,29 @@ function ProfessorLogin() {
                 body: JSON.stringify(requestData)
             });
 
-            if (!response.ok) {
+            if (!registerResponse.ok) {
                 throw new Error("Registration failed. Please check your credentials and secret code.");
             }
 
-            const data = await response.json();
+            const registerData = await registerResponse.json();
 
             // Save JWT token in localStorage if returned
-            if (data.jwt_token) {
-                localStorage.setItem("jwt_token", data.jwt_token);
+            if (registerData.jwt_token) {
+                localStorage.setItem("jwt_token", registerData.jwt_token);
                 console.log("Registration successful, JWT token stored!");
 
-                navigate("/courses");
+                navigate("/courses"); // Redirect to courses or appropriate page
             }
 
         } catch (error) {
             setErrorMessage(error.message);
-            console.error("Error registering:", error);
+            console.error("Error registering or logging in:", error);
         }
     };
 
     return (
         <div className="login-container">
-            <h1>Professor Registration</h1>
+            <h1>Professor Login / Registration</h1>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form className="login-form" onSubmit={handleSubmit}>
                 {/* Username Input */}
@@ -92,7 +114,7 @@ function ProfessorLogin() {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="login-btn">Register</button>
+                <button type="submit" className="login-btn">Login / Register</button>
             </form>
         </div>
     );
