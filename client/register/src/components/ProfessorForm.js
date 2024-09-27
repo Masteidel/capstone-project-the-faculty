@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ProfessorForm.css";
+import { useNavigate } from "react-router-dom";
 
 function ProfessorForm() {
     const [professorData, setProfessorData] = useState({
@@ -12,6 +13,7 @@ function ProfessorForm() {
     const [professors, setProfessors] = useState([]); // Store the list of professors
     const [isProfileComplete, setIsProfileComplete] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     // Fetch all professors and find the next available professorId
     useEffect(() => {
@@ -82,7 +84,9 @@ function ProfessorForm() {
             console.log("New professor created:", newProfessor);
 
             alert("Professor profile created successfully!");
-            setIsProfileComplete(true); // Mark profile as complete
+            
+            setIsProfileComplete(true);
+            navigate("/courses"); // Mark profile as complete
 
         } catch (error) {
             setErrorMessage(error.message);
@@ -90,10 +94,6 @@ function ProfessorForm() {
         }
     };
 
-    if (isProfileComplete) {
-        console.log("Professor ID after profile creation:", professorData.professorId); // Log the professorId after profile creation
-        return <p>Professor profile has been created successfully!</p>;
-    }
 
     return (
         <div className="professor-profile-container">
